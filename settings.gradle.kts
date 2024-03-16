@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "paginated-lazy-list"
 include(":app")
+include(":paginated-lazy-list")

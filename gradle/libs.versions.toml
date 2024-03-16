@@ -1,0 +1,76 @@
+[versions]
+agp = "8.3.0"
+kotlin = "1.9.22"
+core-ktx = "1.12.0"
+junit = "4.13.2"
+androidx-test-ext-junit = "1.1.5"
+espresso-core = "3.5.1"
+lifecycle-runtime-ktx = "2.7.0"
+activity-compose = "1.8.2"
+compose-compiler = "1.5.8"
+compose-bom = "2024.02.02"
+robolectric = "4.11.1"
+hilt = "2.49"
+mockito = "5.2.1"
+assertK = "0.28.0"
+lifecycle-runtime-compose = "2.7.0"
+kotlinx-coroutines-android = "1.7.3"
+
+[libraries]
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+ui = { group = "androidx.compose.ui", name = "ui" }
+ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+material3 = { group = "androidx.compose.material3", name = "material3" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+mockito = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito" }
+assertK = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertK" }
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+
+[bundles]
+android = [
+    "core-ktx",
+    "lifecycle-runtime-ktx",
+]
+compose = [
+    "activity-compose",
+    "ui",
+    "ui-graphics",
+    "ui-tooling",
+    "ui-tooling-preview",
+    "material3",
+    "lifecycle-runtime-compose",
+    "kotlinx-coroutines-android",
+]
+composeDebug = [
+    "ui-tooling",
+    "ui-tooling-preview"
+]
+testing = [
+    "junit",
+    "androidx-test-ext-junit",
+    "espresso-core",
+    "robolectric",
+    "mockito",
+    "assertK",
+]
+composeTesting = [
+    "ui-test-junit4",
+    "ui-test-manifest",
+]

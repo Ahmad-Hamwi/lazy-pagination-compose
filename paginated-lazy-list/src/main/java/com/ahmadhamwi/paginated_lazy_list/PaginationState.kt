@@ -19,15 +19,19 @@ class PaginationState<T>(
             internalState.value.items!!
         }
 
+    val totalItemsSize: Int?
+        get() = internalState.value.totalItemCount
+
     fun setError(error: Exception) {
         internalState.value = PaginationInternalState.Error(error, internalState.value.items)
     }
 
-    fun appendPage(page: List<T>, isLastPage: Boolean = false) {
+    fun appendPage(page: List<T>, isLastPage: Boolean = false, totalItemCount: Int? = null) {
         val pages = internalState.value.items
         val newPages = (pages ?: listOf()) + page
 
-        internalState.value = PaginationInternalState.Loaded(newPages, isLastPage)
+        requestedPageNumber++
+        internalState.value = PaginationInternalState.Loaded(newPages, totalItemCount, isLastPage)
     }
 
     fun retryLastFailedRequest() {

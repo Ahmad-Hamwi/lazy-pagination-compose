@@ -181,41 +181,37 @@ class PaginatedLazyColumnTest {
     }
 
     @Test
-    fun `retry first failed request would request again & show progress`() = runComposeUiTest {
-        val pageNumbersCalled = mutableListOf<Int>()
+    fun `retry first failed request would request again the same page & show progress`() =
+        runComposeUiTest {
+            val pageNumbersCalled = mutableListOf<Int>()
 
-        val state = PaginationState<String> { pageNumber ->
-            pageNumbersCalled += pageNumber
+            val state = PaginationState<String> { pageNumbersCalled += it }
+
+            setContent { SutComposable(state) }
+            state.setError(Exception())
+            state.retryLastFailedRequest()
+
+            onNodeWithTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
+            assertThat(pageNumbersCalled).isEqualTo(listOf(1, 1))
         }
-        state.setError(Exception())
-
-        setContent { SutComposable(state) }
-
-        state.retryLastFailedRequest()
-
-        onNodeWithTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
-        assertThat(pageNumbersCalled).isEqualTo(listOf(1))
-    }
 
     @Test
-    fun `retry new page failed request would request again & show progress`() = runComposeUiTest {
-        val pageNumbersCalled = mutableListOf<Int>()
+    fun `retry new page failed request would request again the same page & show progress`() =
+        runComposeUiTest {
+            val pageNumbersCalled = mutableListOf<Int>()
 
-        val state = PaginationState<String> { pageNumbersCalled += it }
-        state.appendPage(listOf())
-        state.setError(Exception())
+            val state = PaginationState<String> { pageNumbersCalled += it }
 
-        setContent {
-            SutComposable(state)
+            setContent { SutComposable(state) }
+            state.appendPage(listOf())
+            state.setError(Exception())
+            state.retryLastFailedRequest()
+
+            onNodeWithTag(LAZY_COLUMN_TAG).performScrollToIndex(0)
+
+            onNodeWithTag(NEW_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
+            assertThat(pageNumbersCalled).isEqualTo(listOf(1, 2))
         }
-
-        state.retryLastFailedRequest()
-
-        onNodeWithTag(LAZY_COLUMN_TAG).performScrollToIndex(0)
-
-        onNodeWithTag(NEW_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
-        assertThat(pageNumbersCalled).isEqualTo(listOf(1))
-    }
 
     @Test
     fun `Refreshing resets the state and an initial load starts`() = runComposeUiTest {
@@ -231,35 +227,52 @@ class PaginatedLazyColumnTest {
     }
 
     @Test
-    fun `first page error, refresh, first page requested again, show first page`() = runComposeUiTest {
-        val pageNumbersCalled = mutableListOf<Int>()
-        val state = PaginationState<String> { pageNumbersCalled += it }
-        state.setError(Exception())
-        setContent { SutComposable(state) }
-        onNodeWithTag(FIRST_PAGE_ERROR_INDICATOR_TAG).assertExists()
+    fun `first page error, refresh, first page requested again, show first page`() =
+        runComposeUiTest {
+            val pageNumbersCalled = mutableListOf<Int>()
+            val state = PaginationState<String> { pageNumbersCalled += it }
+            state.setError(Exception())
+            setContent { SutComposable(state) }
+            onNodeWithTag(FIRST_PAGE_ERROR_INDICATOR_TAG).assertExists()
 
-        state.refresh()
-        onNodeWithTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
+            state.refresh()
+            onNodeWithTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
 
-        state.appendPage(listOf(""), isLastPage = true)
-        onNodeWithTag(ITEM_CONTENT_TAG).assertExists()
+            state.appendPage(listOf(""), isLastPage = true)
+            onNodeWithTag(ITEM_CONTENT_TAG).assertExists()
 
-        assertThat(pageNumbersCalled).isEqualTo(listOf(1))
-    }
+            assertThat(pageNumbersCalled).isEqualTo(listOf(1))
+        }
 
     @Test
-    fun `first page loaded, refresh, first page requested again, show first page`() = runComposeUiTest {
+    fun `first page loaded, refresh, first page requested again, show first page`() =
+        runComposeUiTest {
+            val pageNumbersCalled = mutableListOf<Int>()
+            val state = PaginationState<String> { pageNumbersCalled += it }
+            state.appendPage(listOf(""), isLastPage = true)
+            setContent { SutComposable(state) }
+
+            state.refresh()
+            onNodeWithTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
+
+            state.appendPage(listOf(""), isLastPage = true)
+            onNodeWithTag(ITEM_CONTENT_TAG).assertExists()
+
+            assertThat(pageNumbersCalled).isEqualTo(listOf(1))
+        }
+
+    @Test
+    fun `loads only one page after a scroll`() = runComposeUiTest {
         val pageNumbersCalled = mutableListOf<Int>()
         val state = PaginationState<String> { pageNumbersCalled += it }
-        state.appendPage(listOf(""), isLastPage = true)
+
         setContent { SutComposable(state) }
+        state.appendPage(listOf("", "", "", "", ""), isLastPage = false)
+        onNodeWithTag(LAZY_COLUMN_TAG).performScrollToIndex(4)
+        waitForIdle()
+        state.appendPage(listOf("", "", "", "", ""), isLastPage = false)
+        waitForIdle()
 
-        state.refresh()
-        onNodeWithTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
-
-        state.appendPage(listOf(""), isLastPage = true)
-        onNodeWithTag(ITEM_CONTENT_TAG).assertExists()
-
-        assertThat(pageNumbersCalled).isEqualTo(listOf(1))
+        assertThat(pageNumbersCalled).isEqualTo(listOf(1, 2))
     }
 }

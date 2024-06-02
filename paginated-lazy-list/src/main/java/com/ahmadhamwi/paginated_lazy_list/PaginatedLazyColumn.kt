@@ -23,8 +23,8 @@ fun <T> PaginatedLazyColumn(
     modifier: Modifier = Modifier,
     firstPageProgressIndicator: @Composable () -> Unit = {},
     newPageProgressIndicator: @Composable () -> Unit = {},
-    firstPageErrorIndicator: @Composable () -> Unit = {},
-    newPageErrorIndicator: @Composable () -> Unit = {},
+    firstPageErrorIndicator: @Composable (e: Exception) -> Unit = {},
+    newPageErrorIndicator: @Composable (e: Exception) -> Unit = {},
     state: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
     reverseLayout: Boolean = false,
@@ -47,7 +47,9 @@ fun <T> PaginatedLazyColumn(
     }
 
     if (internalState is PaginationInternalState.Error && internalState.items == null) {
-        firstPageErrorIndicator()
+        firstPageErrorIndicator(
+            (internalState as PaginationInternalState.Error).error
+        )
     }
 
     if (internalState.items != null) {
@@ -93,7 +95,9 @@ fun <T> PaginatedLazyColumn(
                 item(
                     key = LazyListKeys.NEW_PAGE_ERROR_INDICATOR_KEY
                 ) {
-                    newPageErrorIndicator()
+                    newPageErrorIndicator(
+                        internalStateRef.error
+                    )
                 }
             }
         }

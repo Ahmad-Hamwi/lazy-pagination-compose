@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performScrollToKey
 import androidx.compose.ui.test.runComposeUiTest
@@ -44,13 +46,17 @@ class PaginatedLazyColumnTest {
                 Box(modifier = Modifier.testTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG))
             },
             firstPageErrorIndicator = {
-                Box(modifier = Modifier.testTag(FIRST_PAGE_ERROR_INDICATOR_TAG))
+                Box(modifier = Modifier.testTag(FIRST_PAGE_ERROR_INDICATOR_TAG)) {
+                    Text(it.message.toString())
+                }
             },
             newPageProgressIndicator = {
                 Box(modifier = Modifier.testTag(NEW_PAGE_PROGRESS_INDICATOR_TAG))
             },
             newPageErrorIndicator = {
-                Box(modifier = Modifier.testTag(NEW_PAGE_ERROR_INDICATOR_TAG))
+                Box(modifier = Modifier.testTag(NEW_PAGE_ERROR_INDICATOR_TAG)) {
+                    Text(it.message.toString())
+                }
             }
         ) {
             itemsIndexed(
@@ -108,9 +114,10 @@ class PaginatedLazyColumnTest {
             SutComposable(paginationState = state)
         }
 
-        state.setError(Exception())
+        state.setError(Exception("First page error"))
 
         onNodeWithTag(FIRST_PAGE_ERROR_INDICATOR_TAG).assertExists()
+        onNodeWithText("First page error").assertExists()
         assertThat(pageNumbersCalled).isEqualTo(listOf(1))
     }
 
@@ -157,12 +164,13 @@ class PaginatedLazyColumnTest {
         setContent { SutComposable(state) }
 
         state.appendPage(listOf("", "", "", "", ""))
-        state.setError(Exception())
+        state.setError(Exception("New page error"))
 
         onNodeWithTag(LAZY_COLUMN_TAG).performScrollToIndex(4)
         onNodeWithTag(LAZY_COLUMN_TAG).performScrollToKey(LazyListKeys.NEW_PAGE_ERROR_INDICATOR_KEY)
 
         onNodeWithTag(NEW_PAGE_ERROR_INDICATOR_TAG).assertExists()
+        onNodeWithText("New page error").assertExists()
         assertThat(pageNumbersCalled).isEqualTo(listOf(1))
     }
 

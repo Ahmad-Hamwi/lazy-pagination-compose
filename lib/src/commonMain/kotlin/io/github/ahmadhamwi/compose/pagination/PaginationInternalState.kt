@@ -1,4 +1,4 @@
-package io.github.ahmadhamwi.paginated_lazy_list
+package io.github.ahmadhamwi.compose.pagination
 
 internal sealed class PaginationInternalState<T>(
     open val items: List<T>?,

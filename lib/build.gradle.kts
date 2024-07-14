@@ -43,7 +43,7 @@ kotlin {
 }
 
 android {
-    namespace = "io.github.ahmadhamwi.paginated_lazy_list"
+    namespace = "io.github.ahmadhamwi.lazy_pagination_compose"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

@@ -1,4 +1,4 @@
-package io.github.ahmadhamwi.paginated_lazy_list
+package io.github.ahmadhamwi.compose.pagination
 
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollableDefaults

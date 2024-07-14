@@ -1,4 +1,4 @@
-rootProject.name = "PaginatedLazyList-KMP"
+rootProject.name = "lazy-pagination-compose"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

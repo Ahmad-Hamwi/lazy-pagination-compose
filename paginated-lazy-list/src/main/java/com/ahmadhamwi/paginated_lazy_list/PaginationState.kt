@@ -1,11 +1,13 @@
 package com.ahmadhamwi.paginated_lazy_list
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 
 @Stable
 class PaginationState<T>(
-    internal val pageRequestListener: ((Int) -> Unit)? = null
+    internal val onRequestPage: (suspend PaginationState<T>.(Int) -> Unit)? = null
 ) {
     internal var internalState =
         mutableStateOf<PaginationInternalState<T>>(PaginationInternalState.Initial())
@@ -19,19 +21,16 @@ class PaginationState<T>(
             internalState.value.items!!
         }
 
-    val totalItemsSize: Int?
-        get() = internalState.value.totalItemCount
-
     fun setError(error: Exception) {
         internalState.value = PaginationInternalState.Error(error, internalState.value.items)
     }
 
-    fun appendPage(page: List<T>, isLastPage: Boolean = false, totalItemCount: Int? = null) {
+    fun appendPage(items: List<T>, isLastPage: Boolean = false) {
         val pages = internalState.value.items
-        val newPages = (pages ?: listOf()) + page
+        val newPages = (pages ?: listOf()) + items
 
         requestedPageNumber++
-        internalState.value = PaginationInternalState.Loaded(newPages, totalItemCount, isLastPage)
+        internalState.value = PaginationInternalState.Loaded(newPages, isLastPage)
     }
 
     fun retryLastFailedRequest() {
@@ -42,4 +41,11 @@ class PaginationState<T>(
         requestedPageNumber = 0
         internalState.value = PaginationInternalState.Initial()
     }
+}
+
+@Composable
+fun <T> rememberPaginationState(
+    onRequestPage: suspend PaginationState<T>.(Int) -> Unit
+): PaginationState<T> {
+    return remember { PaginationState(onRequestPage) }
 }

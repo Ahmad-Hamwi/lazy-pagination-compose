@@ -16,7 +16,7 @@ jobs:
       - name: set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '11'
           distribution: 'zulu'
           cache: gradle
 
@@ -36,5 +36,6 @@ jobs:
       - name: Build
         run: ./gradlew assembleRelease
 
-      - name: Run Unit Tests
-        run: ./gradlew testReleaseUnitTest
+#     Robolectric is not supported on CMP for now
+#      - name: Run Unit Tests
+#        run: ./gradlew testReleaseUnitTest

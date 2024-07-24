@@ -53,7 +53,7 @@ kotlin {
 }
 
 android {
-    namespace = "io.github.ahmadhamwi.paginated_lazy_list"
+    namespace = "io.github.ahmadhamwi.lazy-pagination-compose"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -61,11 +61,11 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "io.github.ahmadhamwi.paginated_lazy_list"
+        applicationId = "io.github.ahmad-hamwi.lazy-pagination-compose"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
     }
     packaging {
         resources {
@@ -95,7 +95,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "io.github.ahmadhamwi.paginated_lazy_list"
+            packageName = "io.github.ahmad-hamwi.lazy-pagination-compose"
             packageVersion = "1.0.0"
         }
     }

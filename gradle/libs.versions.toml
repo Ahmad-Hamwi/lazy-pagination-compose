@@ -16,6 +16,7 @@ kotlin = "2.0.0"
 kotlinVersion = "1.9.0"
 jetbrainsKotlinJvm = "1.9.0"
 assertK = "0.28.0"
+nexus-publish = "2.0.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -29,6 +30,7 @@ androidx-material = { group = "com.google.android.material", name = "material", 
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 assertK = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertK" }
+nexus-publish = { module = "io.github.gradle-nexus.publish-plugin:io.github.gradle-nexus.publish-plugin.gradle.plugin", version.ref = "nexus-publish" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

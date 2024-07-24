@@ -2,6 +2,7 @@ rootProject.name = "lazy-pagination-compose"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
+    includeBuild("publishing")
     repositories {
         google {
             mavenContent {

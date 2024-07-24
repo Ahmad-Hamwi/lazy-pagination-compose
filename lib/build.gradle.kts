@@ -24,6 +24,10 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets {
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+        }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)

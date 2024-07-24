@@ -16,7 +16,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App() {
     MaterialTheme {
         Scaffold {
-            ScaffoldContent(
+            Content(
                 modifier = Modifier.padding(it)
             )
         }
@@ -24,10 +24,10 @@ fun App() {
 }
 
 @Composable
-fun ScaffoldContent(modifier: Modifier = Modifier) {
+fun Content(modifier: Modifier = Modifier) {
     val paginationState = rememberPaginationState(
-        onRequestPage = { requestedPageNumber ->
-            val page = DataSource.getPage(requestedPageNumber)
+        onRequestPage = { pageNumber: Int ->
+            val page = DataSource.getPage(pageNumber)
 
             appendPage(
                 items = page.items,
@@ -48,8 +48,7 @@ fun ScaffoldContent(modifier: Modifier = Modifier) {
     ) {
         itemsIndexed(
             paginationState.allItems,
-            key = { i, item -> "$i-$item" },
-        ) { i, item ->
+        ) { _, item ->
             Item(value = item)
         }
     }

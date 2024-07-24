@@ -4,11 +4,11 @@ object DataSource {
     private const val TOTAL = 3
 
     suspend fun getPage(pageNumber: Int): MyPageModel<String> {
-        delay(2000)
+        delay(1200)
 
         return MyPageModel(
             pageNumber,
-            (((pageNumber - 1) * 15 + 1)..(pageNumber * 15)).map { "Item $it" },
+            (((pageNumber - 1) * 10 + 1)..(pageNumber * 10)).map { "Item $it" },
             pageNumber == TOTAL
         )
     }

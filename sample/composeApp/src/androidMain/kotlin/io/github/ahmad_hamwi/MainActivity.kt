@@ -1,4 +1,4 @@
-package io.github.ahmadhamwi
+package io.github.ahmad_hamwi
 
 import App
 import android.os.Bundle

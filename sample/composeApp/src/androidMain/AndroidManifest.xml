@@ -11,7 +11,7 @@
         <activity
             android:exported="true"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mnc|colorMode|density|fontScale|fontWeightAdjustment|keyboard|layoutDirection|locale|mcc|navigation|smallestScreenSize|touchscreen|uiMode"
-            android:name="io.github.ahmadhamwi.MainActivity">
+            android:name="io.github.ahmad_hamwi.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

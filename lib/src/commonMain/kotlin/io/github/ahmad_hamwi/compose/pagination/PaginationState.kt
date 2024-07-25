@@ -1,4 +1,4 @@
-package io.github.ahmadhamwi.compose.pagination
+package io.github.ahmad_hamwi.compose.pagination
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable

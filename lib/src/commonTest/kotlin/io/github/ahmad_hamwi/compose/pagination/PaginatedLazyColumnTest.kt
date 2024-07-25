@@ -1,4 +1,4 @@
-package io.github.ahmadhamwi.compose.pagination
+package io.github.ahmad_hamwi.compose.pagination
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

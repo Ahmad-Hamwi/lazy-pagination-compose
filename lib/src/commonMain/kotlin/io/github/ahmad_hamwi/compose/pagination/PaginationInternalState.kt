@@ -1,4 +1,4 @@
-package io.github.ahmadhamwi.compose.pagination
+package io.github.ahmad_hamwi.compose.pagination
 
 internal sealed class PaginationInternalState<T>(
     open val items: List<T>?,

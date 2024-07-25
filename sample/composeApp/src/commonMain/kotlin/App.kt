@@ -7,8 +7,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.ahmadhamwi.compose.pagination.PaginatedLazyColumn
-import io.github.ahmadhamwi.compose.pagination.rememberPaginationState
+import io.github.ahmad_hamwi.compose.pagination.PaginatedLazyColumn
+import io.github.ahmad_hamwi.compose.pagination.rememberPaginationState
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

@@ -130,7 +130,7 @@ paginationState.refresh(
 ### Provide your composables for every pagination state you would like to render ###
 
 ```kotlin
-    PaginatedLazyColumn(
+PaginatedLazyColumn(
     paginationState = paginationState,
     firstPageProgressIndicator = { ... },
     newPageProgressIndicator = { ... },

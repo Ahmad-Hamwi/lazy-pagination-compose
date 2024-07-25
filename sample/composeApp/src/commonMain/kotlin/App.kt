@@ -54,12 +54,16 @@ fun TopBar() {
 fun Content(modifier: Modifier = Modifier) {
     val paginationState = rememberPaginationState(
         onRequestPage = { pageNumber: Int ->
-            val page = DataSource.getPage(pageNumber)
+            try {
+                val page = DataSource.getPage(pageNumber)
 
-            appendPage(
-                items = page.items,
-                isLastPage = page.isLastPage
-            )
+                appendPage(
+                    items = page.items,
+                    isLastPage = page.isLastPage
+                )
+            } catch (e: Exception) {
+                setError(e)
+            }
         }
     )
 
@@ -68,8 +72,22 @@ fun Content(modifier: Modifier = Modifier) {
         paginationState = paginationState,
         firstPageProgressIndicator = { FirstPageProgressIndicator() },
         newPageProgressIndicator = { NewPageProgressIndicator() },
-        firstPageErrorIndicator = { FirstPageErrorIndicator() },
-        newPageErrorIndicator = { NewPageErrorIndicator() },
+        firstPageErrorIndicator = { e ->
+            FirstPageErrorIndicator(
+                exception = e,
+                onRetryClicked = {
+                    paginationState.retryLastFailedRequest()
+                }
+            )
+        },
+        newPageErrorIndicator = { e ->
+            NewPageErrorIndicator(
+                exception = e,
+                onRetryClicked = {
+                    paginationState.retryLastFailedRequest()
+                }
+            )
+        },
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {

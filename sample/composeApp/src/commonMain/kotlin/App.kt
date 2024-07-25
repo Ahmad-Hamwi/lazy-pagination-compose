@@ -50,12 +50,14 @@ fun TopBar() {
     }
 }
 
+val dataSource = DataSource()
+
 @Composable
 fun Content(modifier: Modifier = Modifier) {
     val paginationState = rememberPaginationState(
         onRequestPage = { pageNumber: Int ->
             try {
-                val page = DataSource.getPage(pageNumber)
+                val page = dataSource.getPage(pageNumber)
 
                 appendPage(
                     items = page.items,

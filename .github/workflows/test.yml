@@ -10,6 +10,7 @@ name: Production CI
 on:
   pull_request:
     branches: [ "main" ]
+  workflow_call:
 
 permissions:
   contents: read

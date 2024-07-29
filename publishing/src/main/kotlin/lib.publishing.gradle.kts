@@ -7,9 +7,6 @@ plugins {
     signing
 }
 
-group = "io.github.ahmad-hamwi.lazy-pagination-compose"
-version = "1.0.0"
-
 publishing {
 
     publications.withType<MavenPublication> {
@@ -20,7 +17,7 @@ publishing {
 
         pom {
             name.set("Lazy Pagination Compose")
-            description.set("Compose multiplatform lazy lists that handles pagination states automatically as you scroll.")
+            description.set("A Compose Multiplatform pagination solution built on top of lazy lists and handles pagination states automatically as the user scrolls.")
             url.set("https://github.com/Ahmad-Hamwi/lazy-pagination-compose")
 
             licenses {
@@ -31,7 +28,7 @@ publishing {
             }
             developers {
                 developer {
-                    id.set("Ahmad-Hamwi")
+                    id.set("ahmad-hamwi")
                     name.set("Ahmad Hamwi")
                     organization.set("Ahmad Hamwi")
                     organizationUrl.set("https://github.com/Ahmad-Hamwi")

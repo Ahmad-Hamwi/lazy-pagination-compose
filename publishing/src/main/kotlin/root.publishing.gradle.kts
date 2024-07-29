@@ -2,6 +2,11 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin")
 }
 
+allprojects {
+    group = "io.github.ahmad-hamwi.lazy-pagination-compose"
+    version = "0.9.0"
+}
+
 nexusPublishing {
     // Configure maven central repository
     // https://github.com/gradle-nexus/publish-plugin#publishing-to-maven-central-via-sonatype-ossrh

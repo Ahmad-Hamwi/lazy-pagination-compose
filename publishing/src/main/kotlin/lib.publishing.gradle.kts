@@ -7,7 +7,7 @@ plugins {
     signing
 }
 
-group = "io.github.ahmad-hamwi.lazy_pagination_compose"
+group = "io.github.ahmad-hamwi.lazy-pagination-compose"
 version = "1.0.0"
 
 publishing {

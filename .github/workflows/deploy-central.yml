@@ -49,6 +49,7 @@ jobs:
         arguments: |
           ${{ matrix.target }}
           closeSonatypeStagingRepository
+          releaseSonatypeStagingRepository
           -Psigning.gnupg.passphrase='${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}'
           -Psigning.gnupg.keyName='${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}'
           -PsonatypeUsername='${{ secrets.OSSRH_USERNAME }}'

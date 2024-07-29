@@ -1,4 +1,4 @@
-rootProject.name = "lazy-pagination-compose"
+rootProject.name = "lazy-pagination-cmp"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -30,4 +30,4 @@ dependencyResolutionManagement {
 }
 
 include(":sample:composeApp")
-include(":lib")
+include(":lazy-pagination-compose")

@@ -20,6 +20,10 @@ publishing {
             description.set("A Compose Multiplatform pagination solution built on top of lazy lists and handles pagination states automatically as the user scrolls.")
             url.set("https://github.com/Ahmad-Hamwi/lazy-pagination-compose")
 
+            // This is naming the artifact when using publishKotlinMultiplatformPublicationToSonatypeRepository
+            // Other tasks are naming their artifacts from the module's name
+            artifactId = "lazy-pagination-compose"
+
             licenses {
                 license {
                     name.set("MIT")
@@ -28,10 +32,9 @@ publishing {
             }
             developers {
                 developer {
-                    id.set("ahmad-hamwi")
+                    id.set("Ahmad-Hamwi")
                     name.set("Ahmad Hamwi")
-                    organization.set("Ahmad Hamwi")
-                    organizationUrl.set("https://github.com/Ahmad-Hamwi")
+                    url.set("https://github.com/Ahmad-Hamwi")
                 }
             }
             scm {

@@ -3,8 +3,8 @@ plugins {
 }
 
 allprojects {
-    group = "io.github.ahmad-hamwi.lazy-pagination-compose"
-    version = "0.9.0"
+    group = "io.github.ahmad-hamwi"
+    version = "0.9.2"
 }
 
 nexusPublishing {

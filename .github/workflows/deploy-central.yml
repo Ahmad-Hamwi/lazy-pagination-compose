@@ -47,15 +47,13 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - name: Gradle publish
-      uses: gradle/gradle-build-action@ce999babab2de1c4b649dc15f0ee67e6246c994f
-      with:
-        arguments: |
-          ${{ matrix.target }}
-          closeSonatypeStagingRepository
-          releaseSonatypeStagingRepository
-          -Psigning.gnupg.passphrase='${{secrets.OSSRH_GPG_SECRET_KEY_PASSWORD}}'
-          -Psigning.gnupg.keyName='${{secrets.OSSRH_GPG_SECRET_KEY_ID}}'
-          -PsonatypeUsername='${{secrets.OSSRH_USERNAME}}'
-          -PsonatypePassword='${{secrets.OSSRH_PASSWORD}}'
-
+    - name: Grant Permission to Execute Gradle
+      run: chmod +x gradlew
+    - name: Publish to MavenCentral
+      env:
+        GRADLE_PUBLISH_COMMAND: ${{ matrix.target }}
+        OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+        OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
+        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      run: ./gradlew $GRADLE_PUBLISH_COMMAND closeSonatypeStagingRepository -Psigning.gnupg.passphrase=$OSSRH_GPG_SECRET_KEY_PASSWORD -Psigning.gnupg.keyName=$OSSRH_GPG_SECRET_KEY_ID -PsonatypeUsername=$OSSRH_USERNAME -PsonatypePassword=$OSSRH_PASSWORD

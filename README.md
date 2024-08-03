@@ -45,7 +45,7 @@ allprojects {
 }
 ```
 
-Then add the dependency
+### For Compose Multiplatform Project ###
 
 ```toml
 [versions]
@@ -56,6 +56,7 @@ lazyPaginationCompose = { module = "io.github.ahmad-hamwi:lazy-pagination-compos
 ```
 
 ```kotlin
+// Compose Multiplatform
 sourceSets {
     commonMain.dependencies {
         implementation(libs.lazyPaginationCompose)
@@ -63,7 +64,11 @@ sourceSets {
 }
 ```
 
+For an Android Project use `io.github.ahmad-hamwi:lazy-pagination-compose-android`
+
 # Usage #
+
+### Full sample can be found in the [sample module](https://github.com/Ahmad-Hamwi/lazy-pagination-compose/tree/main/sample) ###
 
 ## 1- Initilize your pagination state ##
 
@@ -147,9 +152,40 @@ PaginatedLazyColumn(
 }
 ```
 **Altogether**
+>```kotlin
+>val paginationState = rememberPaginationState(
+>    onRequestPage = { pageNumber: Int ->
+>        try {
+>            val page = DataSource.getPage(pageNumber)
+>
+>            appendPage(
+>                items = page.items,
+>                isLastPage = page.isLastPage
+>            )
+>        } catch (e: Exception) {
+>            setError(e)
+>        }
+>    }
+>)
+>
+>PaginatedLazyColumn(
+>    paginationState = paginationState,
+>    firstPageProgressIndicator = { ... },
+>    newPageProgressIndicator = { ... },
+>    firstPageErrorIndicator = { e -> ... },
+>    newPageErrorIndicator = { e -> ... },
+>) {
+>    itemsIndexed(
+>        paginationState.allItems,
+>    ) { _, item ->
+>        Item(value = item)
+>    }
+>}
+>
+>```
 
 
-**Altogether with a ViewModel**
+**An Example with a ViewModel**
 >```kotlin
 >class MyViewModel : ViewModel() {
 >    val paginationState = PaginationState<Model>(
@@ -195,6 +231,8 @@ PaginatedLazyColumn(
 >    }
 >}
 >```
+
+### Full sample can be found in the [sample module](https://github.com/Ahmad-Hamwi/lazy-pagination-compose/tree/main/sample) ###
 
 # Contributing #
 This library is made to help other developers out in their app developments, feel free to contribute by suggesting ideas and creating issues and PRs that would make this repository more helpful.

@@ -32,7 +32,7 @@ class PaginationState<T>(
         )
     }
 
-    fun appendPage(items: List<T>, isLastPage: Boolean = false) {
+    fun appendPage(items: List<T>, nextPageNumber: Int, isLastPage: Boolean = false) {
         val pages = internalState.value.items
         val newPages = (pages ?: listOf()) + items
 
@@ -41,6 +41,7 @@ class PaginationState<T>(
             internalState.value.initialPageNumber,
             (internalState.value as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
                 ?: internalState.value.initialPageNumber,
+            nextPageNumber,
             newPages,
             isLastPage
         )

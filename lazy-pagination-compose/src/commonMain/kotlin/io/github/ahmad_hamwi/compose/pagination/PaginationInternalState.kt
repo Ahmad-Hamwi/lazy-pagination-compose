@@ -18,6 +18,7 @@ internal sealed class PaginationInternalState<T>(
     class Loaded<T>(
         override val initialPageNumber: Int,
         override val requestedPageNumber: Int,
+        val nextPageNumber: Int,
         override val items: List<T>,
         val isLastPage: Boolean,
     ) : PaginationInternalState<T>(initialPageNumber, items), IHasRequestedPageNumber

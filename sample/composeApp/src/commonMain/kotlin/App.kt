@@ -74,6 +74,7 @@ fun Content(modifier: Modifier = Modifier) {
 
                     appendPage(
                         items = page.items,
+                        nextPageNumber = page.nextPageNumber,
                         isLastPage = page.isLastPage
                     )
                 } catch (e: Exception) {

@@ -99,7 +99,7 @@ class PaginatedLazyColumnTest {
 
         setContent { SutComposable(paginationState) }
 
-        paginationState.appendPage(listOf(""), isLastPage = true)
+        paginationState.appendPage(items = listOf(""), nextPageNumber = 2, isLastPage = true)
 
         onNodeWithTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG).assertDoesNotExist()
         assertThat(pageNumbersCalled).isEqualTo(listOf(1))
@@ -132,7 +132,7 @@ class PaginatedLazyColumnTest {
 
         setContent { SutComposable(state) }
 
-        state.appendPage(listOf(""), isLastPage = true)
+        state.appendPage(items = listOf(""), nextPageNumber = 2, isLastPage = true)
 
         onNodeWithTag(ITEM_CONTENT_TAG).assertExists()
         assertThat(pageNumbersCalled).isEqualTo(listOf(1))
@@ -147,7 +147,7 @@ class PaginatedLazyColumnTest {
 
         setContent { SutComposable(state) }
 
-        state.appendPage(listOf("", "", "", "", ""))
+        state.appendPage(items = listOf("", "", "", "", ""), nextPageNumber = 2)
 
         onNodeWithTag(LAZY_COLUMN_TAG).performScrollToIndex(4)
         onNodeWithTag(LAZY_COLUMN_TAG).performScrollToKey(LazyListKeys.NEW_PAGE_PROGRESS_INDICATOR_KEY)
@@ -165,7 +165,7 @@ class PaginatedLazyColumnTest {
 
         setContent { SutComposable(state) }
 
-        state.appendPage(listOf("", "", "", "", ""))
+        state.appendPage(items = listOf("", "", "", "", ""), nextPageNumber = 2)
         state.setError(Exception("New page error"))
 
         onNodeWithTag(LAZY_COLUMN_TAG).performScrollToIndex(4)
@@ -184,7 +184,7 @@ class PaginatedLazyColumnTest {
 
         setContent { SutComposable(state) }
 
-        state.appendPage(listOf(""), isLastPage = true)
+        state.appendPage(items = listOf(""), nextPageNumber = 2, isLastPage = true)
 
         onNodeWithTag(NEW_PAGE_PROGRESS_INDICATOR_TAG).assertDoesNotExist()
         assertThat(pageNumbersCalled).isEqualTo(listOf(1))
@@ -213,7 +213,7 @@ class PaginatedLazyColumnTest {
             val state = defaultPaginationState { pageNumbersCalled += it }
 
             setContent { SutComposable(state) }
-            state.appendPage(listOf())
+            state.appendPage(items = listOf(), nextPageNumber = 2)
             state.setError(Exception())
             state.retryLastFailedRequest()
 
@@ -248,7 +248,7 @@ class PaginatedLazyColumnTest {
             state.refresh()
             onNodeWithTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
 
-            state.appendPage(listOf(""), isLastPage = true)
+            state.appendPage(listOf(""), nextPageNumber = 2, isLastPage = true)
             onNodeWithTag(ITEM_CONTENT_TAG).assertExists()
 
             assertThat(pageNumbersCalled).isEqualTo(listOf(1))
@@ -259,13 +259,13 @@ class PaginatedLazyColumnTest {
         runComposeUiTest {
             val pageNumbersCalled = mutableListOf<Int>()
             val state = defaultPaginationState { pageNumbersCalled += it }
-            state.appendPage(listOf(""), isLastPage = true)
+            state.appendPage(listOf(""), nextPageNumber = 2, isLastPage = true)
             setContent { SutComposable(state) }
 
             state.refresh()
             onNodeWithTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
 
-            state.appendPage(listOf(""), isLastPage = true)
+            state.appendPage(listOf(""), nextPageNumber = 2, isLastPage = true)
             onNodeWithTag(ITEM_CONTENT_TAG).assertExists()
 
             assertThat(pageNumbersCalled).isEqualTo(listOf(1))
@@ -277,10 +277,10 @@ class PaginatedLazyColumnTest {
         val state = defaultPaginationState { pageNumbersCalled += it }
 
         setContent { SutComposable(state) }
-        state.appendPage(listOf("", "", "", "", ""), isLastPage = false)
+        state.appendPage(items = listOf("", "", "", "", ""), nextPageNumber = 2, isLastPage = false)
         onNodeWithTag(LAZY_COLUMN_TAG).performScrollToIndex(4)
         waitForIdle()
-        state.appendPage(listOf("", "", "", "", ""), isLastPage = false)
+        state.appendPage(items = listOf("", "", "", "", ""), nextPageNumber = 3, isLastPage = false)
         waitForIdle()
 
         assertThat(pageNumbersCalled).isEqualTo(listOf(1, 2))

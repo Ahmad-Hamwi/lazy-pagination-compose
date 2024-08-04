@@ -15,6 +15,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.ahmad_hamwi.compose.pagination.PaginatedLazyColumn
 import io.github.ahmad_hamwi.compose.pagination.rememberPaginationState
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -61,17 +63,21 @@ val dataSource = DataSource()
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Content(modifier: Modifier = Modifier) {
+    val scope = rememberCoroutineScope()
+
     val paginationState = rememberPaginationState(
         onRequestPage = { pageNumber: Int ->
-            try {
-                val page = dataSource.getPage(pageNumber)
+            scope.launch {
+                try {
+                    val page = dataSource.getPage(pageNumber)
 
-                appendPage(
-                    items = page.items,
-                    isLastPage = page.isLastPage
-                )
-            } catch (e: Exception) {
-                setError(e)
+                    appendPage(
+                        items = page.items,
+                        isLastPage = page.isLastPage
+                    )
+                } catch (e: Exception) {
+                    setError(e)
+                }
             }
         }
     )

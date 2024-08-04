@@ -81,9 +81,13 @@ val paginationState = rememberPaginationState<Model>(...)
 ### Pass your `onRequestPage` callback when creating your `PaginationState` and call your data source ###
 
 ```kotlin
+val scope = rememberCoroutineScope()
+
 val paginationState = rememberPaginationState<Model>(
     onRequestPage = { pageNumber: Int ->
-        val page = DataSource.getPage(pageNumber) // A coroutine that's tied to a composable scope
+        scope.launch {
+            val page = DataSource.getPage(pageNumber)    
+        }
     }
 )
 ```
@@ -92,12 +96,14 @@ val paginationState = rememberPaginationState<Model>(
 ```kotlin
 val paginationState = rememberPaginationState(
     onRequestPage = { pageNumber: Int ->
-        val page = DataSource.getPage(pageNumber)
+        scope.launch {
+            val page = DataSource.getPage(pageNumber)
 
-        appendPage(
-            items = page.items,
-            isLastPage = page.isLastPage // optional, defaults to false
-        )
+            appendPage(
+                items = page.items,
+                isLastPage = page.isLastPage // optional, defaults to false
+            )    
+        }
     }
 )
 ```
@@ -106,15 +112,17 @@ val paginationState = rememberPaginationState(
 ```kotlin
 val paginationState = rememberPaginationState(
     onRequestPage = { pageNumber: Int ->
-        try {
-            val page = DataSource.getPage(pageNumber)
+        scope.launch {
+            try {
+                val page = DataSource.getPage(pageNumber)
 
-            appendPage(
-                items = page.items,
-                isLastPage = page.isLastPage
-            )
-        } catch (e: Exception) {
-            setError(e)
+                appendPage(
+                    items = page.items,
+                    isLastPage = page.isLastPage
+                )
+            } catch (e: Exception) {
+                setError(e)
+            }    
         }
     }
 )
@@ -155,15 +163,17 @@ PaginatedLazyColumn(
 >```kotlin
 >val paginationState = rememberPaginationState(
 >    onRequestPage = { pageNumber: Int ->
->        try {
->            val page = DataSource.getPage(pageNumber)
->
->            appendPage(
->                items = page.items,
->                isLastPage = page.isLastPage
->            )
->        } catch (e: Exception) {
->            setError(e)
+>        scope.launch {
+>            try {
+>                val page = DataSource.getPage(pageNumber)
+>    
+>                appendPage(
+>                    items = page.items,
+>                    isLastPage = page.isLastPage
+>                )
+>            } catch (e: Exception) {
+>                setError(e)
+>            }
 >        }
 >    }
 >)

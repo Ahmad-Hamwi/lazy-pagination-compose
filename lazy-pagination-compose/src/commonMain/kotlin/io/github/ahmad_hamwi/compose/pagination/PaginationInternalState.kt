@@ -26,7 +26,7 @@ internal sealed class PaginationInternalState<T>(
     class Error<T>(
         override val initialPageNumber: Int,
         override val requestedPageNumber: Int,
-        val error: Exception,
+        val exception: Exception,
         override val items: List<T>? = null,
     ) : PaginationInternalState<T>(initialPageNumber, items), IHasRequestedPageNumber
 

@@ -55,7 +55,7 @@ fun <T> PaginatedLazyColumn(
 
     if (internalState is PaginationInternalState.Error && internalState.items == null) {
         firstPageErrorIndicator(
-            (internalState as PaginationInternalState.Error).error
+            (internalState as PaginationInternalState.Error).exception
         )
     }
 
@@ -65,15 +65,22 @@ fun <T> PaginatedLazyColumn(
                 val hasReachedLastItem = (firstVisibleItemIndex?.index ?: Int.MIN_VALUE) >=
                         (internalState.items?.lastIndex ?: Int.MAX_VALUE)
 
-                val isNotLastPage =
-                    (internalState as? PaginationInternalState.Loaded)?.isLastPage == false
+                val isLastPage =
+                    (internalState as? PaginationInternalState.Loaded)?.isLastPage != false
 
-                if (hasReachedLastItem && isNotLastPage) {
+                val newlyRequestedPageNumber =
+                    (internalState as? PaginationInternalState.Loaded)?.nextPageNumber
+
+                val previouslyRequestedPageNumber =
+                    (internalState as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+
+                if (hasReachedLastItem && !isLastPage) {
                     internalState = PaginationInternalState.Loading(
-                        internalState.initialPageNumber,
-                        (internalState as? PaginationInternalState.Loaded)?.nextPageNumber
+                        initialPageNumber = internalState.initialPageNumber,
+                        requestedPageNumber = newlyRequestedPageNumber
+                            ?: previouslyRequestedPageNumber
                             ?: internalState.initialPageNumber,
-                        internalState.items
+                        items = internalState.items
                     )
                 }
             }
@@ -108,7 +115,7 @@ fun <T> PaginatedLazyColumn(
                     key = LazyListKeys.NEW_PAGE_ERROR_INDICATOR_KEY
                 ) {
                     newPageErrorIndicator(
-                        internalStateRef.error
+                        internalStateRef.exception
                     )
                 }
             }
@@ -117,11 +124,13 @@ fun <T> PaginatedLazyColumn(
 
     LaunchedEffect(internalState) {
         if (internalState is PaginationInternalState.Initial) {
-            internalState = PaginationInternalState.Loading(
-                internalState.initialPageNumber,
+            val requestedPageNumber =
                 (internalState as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
-                    ?: internalState.initialPageNumber,
-                internalState.items
+
+            internalState = PaginationInternalState.Loading(
+                initialPageNumber = internalState.initialPageNumber,
+                requestedPageNumber = requestedPageNumber ?: internalState.initialPageNumber,
+                items = internalState.items
             )
         }
     }

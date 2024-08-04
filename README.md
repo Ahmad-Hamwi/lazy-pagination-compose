@@ -72,10 +72,13 @@ For an Android Project use `io.github.ahmad-hamwi:lazy-pagination-compose-androi
 
 ## 1- Initilize your pagination state ##
 
-### Create a `PaginationState` by remembering it in your composable or adding it to you ViewModel.
+### Create a `PaginationState` by remembering it in your composable or creating it to your ViewModel.
 
 ```kotlin
-val paginationState = rememberPaginationState<Model>(...)
+val paginationState = rememberPaginationState<Model>(
+    initialPageNumber = 1,
+    ...
+)
 ```
 
 ### Pass your `onRequestPage` callback when creating your `PaginationState` and call your data source ###
@@ -84,6 +87,7 @@ val paginationState = rememberPaginationState<Model>(...)
 val scope = rememberCoroutineScope()
 
 val paginationState = rememberPaginationState<Model>(
+    initialPageNumber = 1,
     onRequestPage = { pageNumber: Int ->
         scope.launch {
             val page = DataSource.getPage(pageNumber)    
@@ -95,6 +99,7 @@ val paginationState = rememberPaginationState<Model>(
 ### Append data using `appendPage` and flag the end of your list using `isLastPage` ###
 ```kotlin
 val paginationState = rememberPaginationState(
+    initialPageNumber = 1,
     onRequestPage = { pageNumber: Int ->
         scope.launch {
             val page = DataSource.getPage(pageNumber)
@@ -111,6 +116,7 @@ val paginationState = rememberPaginationState(
 ### Handle errors using `setError` ###
 ```kotlin
 val paginationState = rememberPaginationState(
+    initialPageNumber = 1,
     onRequestPage = { pageNumber: Int ->
         scope.launch {
             try {
@@ -135,9 +141,7 @@ paginationState.retryLastFailedRequest()
 
 ### Refreshing can be through `refresh` method ###
 ```kotlin
-paginationState.refresh(
-    initialPage = 1 // optional and defaults to 1
-)
+paginationState.refresh(initialPageNumber = 1)
 ```
 
 ## 2- Define your paginated `LazyColumn` ##
@@ -162,6 +166,7 @@ PaginatedLazyColumn(
 **Altogether**
 >```kotlin
 >val paginationState = rememberPaginationState(
+>    initialPageNumber = 1,
 >    onRequestPage = { pageNumber: Int ->
 >        scope.launch {
 >            try {
@@ -199,6 +204,7 @@ PaginatedLazyColumn(
 >```kotlin
 >class MyViewModel : ViewModel() {
 >    val paginationState = PaginationState<Model>(
+>        initialPageNumber = 1,
 >        onRequestPage = { loadPage(it) }
 >    )
 >    

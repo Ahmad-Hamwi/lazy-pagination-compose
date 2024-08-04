@@ -7,12 +7,13 @@ import androidx.compose.runtime.remember
 
 @Stable
 class PaginationState<T>(
+    initialPageNumber: Int,
     internal val onRequestPage: PaginationState<T>.(Int) -> Unit
 ) {
     internal var internalState =
         mutableStateOf<PaginationInternalState<T>>(PaginationInternalState.Initial())
 
-    internal var requestedPageNumber = 0
+    var requestedPageNumber: Int = initialPageNumber - 1
 
     val allItems: List<T>
         get() = if (internalState.value.items == null) {
@@ -37,15 +38,21 @@ class PaginationState<T>(
         internalState.value = PaginationInternalState.Loading(internalState.value.items)
     }
 
-    fun refresh() {
-        requestedPageNumber = 0
+    fun refresh(initialPageNumber: Int = 1) {
+        requestedPageNumber = initialPageNumber - 1
         internalState.value = PaginationInternalState.Initial()
     }
 }
 
 @Composable
 fun <T> rememberPaginationState(
+    initialPageNumber: Int,
     onRequestPage: PaginationState<T>.(Int) -> Unit
 ): PaginationState<T> {
-    return remember { PaginationState(onRequestPage) }
+    return remember {
+        PaginationState(
+            initialPageNumber = initialPageNumber,
+            onRequestPage = onRequestPage
+        )
+    }
 }

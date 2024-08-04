@@ -66,6 +66,7 @@ fun Content(modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
 
     val paginationState = rememberPaginationState(
+        initialPageNumber = 1,
         onRequestPage = { pageNumber: Int ->
             scope.launch {
                 try {

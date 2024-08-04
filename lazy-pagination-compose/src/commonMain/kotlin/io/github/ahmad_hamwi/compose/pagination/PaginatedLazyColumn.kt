@@ -69,7 +69,10 @@ fun <T> PaginatedLazyColumn(
                     (internalState as? PaginationInternalState.Loaded)?.isLastPage == false
 
                 if (hasReachedLastItem && isNotLastPage) {
-                    internalState = PaginationInternalState.Loading(internalState.items)
+                    internalState = PaginationInternalState.Loading(
+                        internalState.initialPageNumber,
+                        internalState.items
+                    )
                 }
             }
         }
@@ -112,7 +115,10 @@ fun <T> PaginatedLazyColumn(
 
     LaunchedEffect(internalState) {
         if (internalState is PaginationInternalState.Initial) {
-            internalState = PaginationInternalState.Loading(internalState.items)
+            internalState = PaginationInternalState.Loading(
+                internalState.initialPageNumber,
+                internalState.items
+            )
         }
     }
 }

@@ -11,7 +11,7 @@ class PaginationState<T>(
     internal val onRequestPage: PaginationState<T>.(Int) -> Unit
 ) {
     internal var internalState =
-        mutableStateOf<PaginationInternalState<T>>(PaginationInternalState.Initial())
+        mutableStateOf<PaginationInternalState<T>>(PaginationInternalState.Initial(initialPageNumber))
 
     var requestedPageNumber: Int = initialPageNumber - 1
 
@@ -23,7 +23,11 @@ class PaginationState<T>(
         }
 
     fun setError(error: Exception) {
-        internalState.value = PaginationInternalState.Error(error, internalState.value.items)
+        internalState.value = PaginationInternalState.Error(
+            internalState.value.initialPageNumber,
+            error,
+            internalState.value.items
+        )
     }
 
     fun appendPage(items: List<T>, isLastPage: Boolean = false) {
@@ -31,16 +35,26 @@ class PaginationState<T>(
         val newPages = (pages ?: listOf()) + items
 
         requestedPageNumber++
-        internalState.value = PaginationInternalState.Loaded(newPages, isLastPage)
+        internalState.value = PaginationInternalState.Loaded(
+            internalState.value.initialPageNumber,
+            newPages,
+            isLastPage
+        )
     }
 
     fun retryLastFailedRequest() {
-        internalState.value = PaginationInternalState.Loading(internalState.value.items)
+        internalState.value = PaginationInternalState.Loading(
+            internalState.value.initialPageNumber,
+            internalState.value.items
+        )
     }
 
-    fun refresh(initialPageNumber: Int = 1) {
-        requestedPageNumber = initialPageNumber - 1
-        internalState.value = PaginationInternalState.Initial()
+    fun refresh(initialPageNumber: Int? = null) {
+        requestedPageNumber = (initialPageNumber ?: internalState.value.initialPageNumber) - 1
+
+        internalState.value = PaginationInternalState.Initial(
+            initialPageNumber ?: internalState.value.initialPageNumber
+        )
     }
 }
 

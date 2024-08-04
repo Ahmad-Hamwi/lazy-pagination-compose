@@ -71,6 +71,8 @@ fun <T> PaginatedLazyColumn(
                 if (hasReachedLastItem && isNotLastPage) {
                     internalState = PaginationInternalState.Loading(
                         internalState.initialPageNumber,
+                        (internalState as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+                            ?: internalState.initialPageNumber,
                         internalState.items
                     )
                 }
@@ -117,6 +119,8 @@ fun <T> PaginatedLazyColumn(
         if (internalState is PaginationInternalState.Initial) {
             internalState = PaginationInternalState.Loading(
                 internalState.initialPageNumber,
+                (internalState as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+                    ?: internalState.initialPageNumber,
                 internalState.items
             )
         }

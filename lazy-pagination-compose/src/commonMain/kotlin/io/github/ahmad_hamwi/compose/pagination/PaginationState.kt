@@ -25,6 +25,8 @@ class PaginationState<T>(
     fun setError(error: Exception) {
         internalState.value = PaginationInternalState.Error(
             internalState.value.initialPageNumber,
+            (internalState.value as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+                ?: internalState.value.initialPageNumber,
             error,
             internalState.value.items
         )
@@ -34,9 +36,11 @@ class PaginationState<T>(
         val pages = internalState.value.items
         val newPages = (pages ?: listOf()) + items
 
-        requestedPageNumber++
+        requestedPageNumber++ // todo convert to next page number
         internalState.value = PaginationInternalState.Loaded(
             internalState.value.initialPageNumber,
+            (internalState.value as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+                ?: internalState.value.initialPageNumber,
             newPages,
             isLastPage
         )
@@ -45,6 +49,8 @@ class PaginationState<T>(
     fun retryLastFailedRequest() {
         internalState.value = PaginationInternalState.Loading(
             internalState.value.initialPageNumber,
+            (internalState.value as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+                ?: internalState.value.initialPageNumber,
             internalState.value.items
         )
     }

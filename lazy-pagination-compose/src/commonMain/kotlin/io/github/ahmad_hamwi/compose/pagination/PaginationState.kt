@@ -13,7 +13,8 @@ class PaginationState<T>(
     internal var internalState =
         mutableStateOf<PaginationInternalState<T>>(PaginationInternalState.Initial(initialPageNumber))
 
-    var requestedPageNumber: Int = initialPageNumber - 1
+    val requestedPageNumber: Int?
+        get() = (internalState.value as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
 
     val allItems: List<T>
         get() = if (internalState.value.items == null) {
@@ -25,7 +26,8 @@ class PaginationState<T>(
     fun setError(error: Exception) {
         internalState.value = PaginationInternalState.Error(
             internalState.value.initialPageNumber,
-            (internalState.value as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+            (internalState.value as? PaginationInternalState.Loaded)?.nextPageNumber
+                ?: (internalState.value as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
                 ?: internalState.value.initialPageNumber,
             error,
             internalState.value.items
@@ -36,7 +38,6 @@ class PaginationState<T>(
         val pages = internalState.value.items
         val newPages = (pages ?: listOf()) + items
 
-        requestedPageNumber++ // todo convert to next page number
         internalState.value = PaginationInternalState.Loaded(
             internalState.value.initialPageNumber,
             (internalState.value as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
@@ -57,8 +58,6 @@ class PaginationState<T>(
     }
 
     fun refresh(initialPageNumber: Int? = null) {
-        requestedPageNumber = (initialPageNumber ?: internalState.value.initialPageNumber) - 1
-
         internalState.value = PaginationInternalState.Initial(
             initialPageNumber ?: internalState.value.initialPageNumber
         )

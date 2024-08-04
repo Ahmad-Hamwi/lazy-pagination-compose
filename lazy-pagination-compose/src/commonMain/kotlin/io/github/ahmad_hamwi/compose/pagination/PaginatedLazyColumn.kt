@@ -22,9 +22,10 @@ object LazyListKeys {
     const val NEW_PAGE_ERROR_INDICATOR_KEY = "newPageErrorIndicatorKey"
 }
 
+@Suppress("UNCHECKED_CAST")
 @Composable
-fun <T> PaginatedLazyColumn(
-    paginationState: PaginationState<T>,
+fun <KEY, T> PaginatedLazyColumn(
+    paginationState: PaginationState<KEY, T>,
     modifier: Modifier = Modifier,
     firstPageProgressIndicator: @Composable () -> Unit = {},
     newPageProgressIndicator: @Composable () -> Unit = {},
@@ -44,7 +45,7 @@ fun <T> PaginatedLazyColumn(
     LaunchedEffect(internalState) {
         (internalState as? PaginationInternalState.Loading)?.also {
             paginationState.run {
-                onRequestPage.invoke(this, it.requestedPageNumber)
+                onRequestPage.invoke(this, it.requestedPageKey)
             }
         }
     }
@@ -68,18 +69,18 @@ fun <T> PaginatedLazyColumn(
                 val isLastPage =
                     (internalState as? PaginationInternalState.Loaded)?.isLastPage != false
 
-                val newlyRequestedPageNumber =
-                    (internalState as? PaginationInternalState.Loaded)?.nextPageNumber
+                val newlyRequestedPageKey =
+                    (internalState as? PaginationInternalState.Loaded)?.nextPageKey
 
-                val previouslyRequestedPageNumber =
-                    (internalState as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+                val previouslyRequestedPageKey =
+                    (internalState as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
 
                 if (hasReachedLastItem && !isLastPage) {
                     internalState = PaginationInternalState.Loading(
-                        initialPageNumber = internalState.initialPageNumber,
-                        requestedPageNumber = newlyRequestedPageNumber
-                            ?: previouslyRequestedPageNumber
-                            ?: internalState.initialPageNumber,
+                        initialPageKey = internalState.initialPageKey,
+                        requestedPageKey = newlyRequestedPageKey
+                            ?: previouslyRequestedPageKey
+                            ?: internalState.initialPageKey,
                         items = internalState.items
                     )
                 }
@@ -124,12 +125,12 @@ fun <T> PaginatedLazyColumn(
 
     LaunchedEffect(internalState) {
         if (internalState is PaginationInternalState.Initial) {
-            val requestedPageNumber =
-                (internalState as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+            val requestedPageKey =
+                (internalState as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
 
             internalState = PaginationInternalState.Loading(
-                initialPageNumber = internalState.initialPageNumber,
-                requestedPageNumber = requestedPageNumber ?: internalState.initialPageNumber,
+                initialPageKey = internalState.initialPageKey,
+                requestedPageKey = requestedPageKey ?: internalState.initialPageKey,
                 items = internalState.items
             )
         }

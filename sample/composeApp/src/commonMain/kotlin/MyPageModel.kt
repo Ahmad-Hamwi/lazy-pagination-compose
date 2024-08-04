@@ -3,5 +3,5 @@ data class MyPageModel<T>(
     val items: List<T>,
     val isLastPage: Boolean
 ) {
-    val nextPageNumber: Int = pageNumber + 1
+    val nextPageKey: Int = pageNumber + 1
 }

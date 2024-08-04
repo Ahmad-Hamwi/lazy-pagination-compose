@@ -5,16 +5,17 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
+@Suppress("UNCHECKED_CAST")
 @Stable
-class PaginationState<T>(
-    initialPageNumber: Int,
-    internal val onRequestPage: PaginationState<T>.(Int) -> Unit
+class PaginationState<KEY, T>(
+    initialPageKey: KEY,
+    internal val onRequestPage: PaginationState<KEY, T>.(KEY) -> Unit
 ) {
     internal var internalState =
-        mutableStateOf<PaginationInternalState<T>>(PaginationInternalState.Initial(initialPageNumber))
+        mutableStateOf<PaginationInternalState<KEY, T>>(PaginationInternalState.Initial(initialPageKey))
 
-    val requestedPageNumber: Int?
-        get() = (internalState.value as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+    val requestedPageKey: KEY?
+        get() = (internalState.value as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
 
     val allItems: List<T>
         get() = if (internalState.value.items == null) {
@@ -25,36 +26,36 @@ class PaginationState<T>(
 
     fun setError(exception: Exception) {
         val internalStateSnapshot = internalState.value
-        val nextPageNumberOfLoadingState: Int? =
-            (internalStateSnapshot as? PaginationInternalState.Loaded)?.nextPageNumber
-        val requestedPageNumberOfLoadingOrErrorState: Int? =
-            (internalStateSnapshot as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+        val nextPageKeyOfLoadingState: KEY? =
+            (internalStateSnapshot as? PaginationInternalState.Loaded)?.nextPageKey
+        val requestedPageKeyOfLoadingOrErrorState: KEY? =
+            (internalStateSnapshot as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
 
-        // requestedPageNumber is going to either be
-        // 1- the nextPageNumber of the loaded state: because the page has already been loaded and showing an error means a new page error state
+        // requestedPageKey is going to either be
+        // 1- the nextPageKey of the loaded state: because the page has already been loaded and showing an error means a new page error state
         // OR
-        // 2- the requestedPageNumber of either a loading or a previous error state
+        // 2- the requestedPageKey of either a loading or a previous error state
         internalState.value = PaginationInternalState.Error(
-            initialPageNumber = internalStateSnapshot.initialPageNumber,
-            requestedPageNumber = nextPageNumberOfLoadingState
-                ?: requestedPageNumberOfLoadingOrErrorState
-                ?: internalStateSnapshot.initialPageNumber,
+            initialPageKey = internalStateSnapshot.initialPageKey,
+            requestedPageKey = nextPageKeyOfLoadingState
+                ?: requestedPageKeyOfLoadingOrErrorState
+                ?: internalStateSnapshot.initialPageKey,
             exception = exception,
             items = internalState.value.items
         )
     }
 
-    fun appendPage(items: List<T>, nextPageNumber: Int, isLastPage: Boolean = false) {
+    fun appendPage(items: List<T>, nextPageKey: KEY, isLastPage: Boolean = false) {
         val newItems = (internalState.value.items ?: listOf()) + items
         val internalStateSnapshot = internalState.value
-        val requestedPageNumberOfLoadingOrErrorState: Int? =
-            (internalStateSnapshot as? PaginationInternalState.IHasRequestedPageNumber)?.requestedPageNumber
+        val requestedPageKeyOfLoadingOrErrorState: KEY? =
+            (internalStateSnapshot as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
 
         internalState.value = PaginationInternalState.Loaded(
-            initialPageNumber = internalState.value.initialPageNumber,
-            requestedPageNumber = requestedPageNumberOfLoadingOrErrorState
-                ?: internalStateSnapshot.initialPageNumber,
-            nextPageNumber = nextPageNumber,
+            initialPageKey = internalState.value.initialPageKey,
+            requestedPageKey = requestedPageKeyOfLoadingOrErrorState
+                ?: internalStateSnapshot.initialPageKey,
+            nextPageKey = nextPageKey,
             items = newItems,
             isLastPage = isLastPage
         )
@@ -68,27 +69,27 @@ class PaginationState<T>(
         }
 
         internalState.value = PaginationInternalState.Loading(
-            initialPageNumber = internalStateSnapshot.initialPageNumber,
-            requestedPageNumber = internalStateSnapshot.requestedPageNumber,
+            initialPageKey = internalStateSnapshot.initialPageKey,
+            requestedPageKey = internalStateSnapshot.requestedPageKey,
             items = internalStateSnapshot.items
         )
     }
 
-    fun refresh(initialPageNumber: Int? = null) {
+    fun refresh(initialPageKey: KEY? = null) {
         internalState.value = PaginationInternalState.Initial(
-            initialPageNumber ?: internalState.value.initialPageNumber
+            initialPageKey ?: internalState.value.initialPageKey
         )
     }
 }
 
 @Composable
-fun <T> rememberPaginationState(
-    initialPageNumber: Int,
-    onRequestPage: PaginationState<T>.(Int) -> Unit
-): PaginationState<T> {
+fun <KEY, T> rememberPaginationState(
+    initialPageKey: KEY,
+    onRequestPage: PaginationState<KEY, T>.(KEY) -> Unit
+): PaginationState<KEY, T> {
     return remember {
         PaginationState(
-            initialPageNumber = initialPageNumber,
+            initialPageKey = initialPageKey,
             onRequestPage = onRequestPage
         )
     }

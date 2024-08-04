@@ -66,15 +66,15 @@ fun Content(modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
 
     val paginationState = rememberPaginationState(
-        initialPageNumber = 1,
-        onRequestPage = { pageNumber: Int ->
+        initialPageKey = 1,
+        onRequestPage = { pageKey: Int ->
             scope.launch {
                 try {
-                    val page = dataSource.getPage(pageNumber)
+                    val page = dataSource.getPage(pageNumber = pageKey)
 
                     appendPage(
                         items = page.items,
-                        nextPageNumber = page.nextPageNumber,
+                        nextPageKey = page.nextPageKey,
                         isLastPage = page.isLastPage
                     )
                 } catch (e: Exception) {

@@ -49,7 +49,7 @@ allprojects {
 
 ```toml
 [versions]
-lazy-pagination-compose = "1.0.0"
+lazy-pagination-compose = "1.1.4"
 
 [libraries]
 lazyPaginationCompose = { module = "io.github.ahmad-hamwi:lazy-pagination-compose", version.ref = "lazy-pagination-compose" }
@@ -75,8 +75,9 @@ For an Android Project use `io.github.ahmad-hamwi:lazy-pagination-compose-androi
 ### Create a `PaginationState` by remembering it in your composable or creating it to your ViewModel.
 
 ```kotlin
-val paginationState = rememberPaginationState<Model>(
-    initialPageNumber = 1,
+// Int is the key which in this example represents the page number
+val paginationState = rememberPaginationState<Int, Model>(
+    initialPageKey = 1,
     ...
 )
 ```
@@ -86,11 +87,11 @@ val paginationState = rememberPaginationState<Model>(
 ```kotlin
 val scope = rememberCoroutineScope()
 
-val paginationState = rememberPaginationState<Model>(
-    initialPageNumber = 1,
-    onRequestPage = { pageNumber: Int ->
+val paginationState = rememberPaginationState<Int, Model>(
+    initialPageKey = 1,
+    onRequestPage = { pageKey: Int ->
         scope.launch {
-            val page = DataSource.getPage(pageNumber)    
+            val page = DataSource.getPage(pageNumber = pageKey, pageSize = 10,)
         }
     }
 )
@@ -98,40 +99,69 @@ val paginationState = rememberPaginationState<Model>(
 
 ### Append data using `appendPage` and flag the end of your list using `isLastPage` ###
 ```kotlin
-val paginationState = rememberPaginationState(
-    initialPageNumber = 1,
-    onRequestPage = { pageNumber: Int ->
+val scope = rememberCoroutineScope()
+
+val paginationState = rememberPaginationState<Int, Model>(
+    initialPageKey = 1,
+    onRequestPage = { pageKey: Int ->
         scope.launch {
-            val page = DataSource.getPage(pageNumber)
+            val page = DataSource.getPage(pageNumber = pageKey, pageSize = 10,)
 
             appendPage(
                 items = page.items,
+                nextPageKey = page.nextPageNumber,
                 isLastPage = page.isLastPage // optional, defaults to false
-            )    
+            )
+        }
+    }
+}
+```
+
+### Handle errors using `setError` ###
+```kotlin
+val paginationState = rememberPaginationState<Int, Model>(
+    initialPageKey = 1,
+    onRequestPage = { pageKey: Int ->
+        scope.launch {
+            try {
+                val page = DataSource.getPage(pageNumber = pageKey, pageSize = 10,)
+
+                appendPage(
+                    items = page.items,
+                    nextPageKey = page.nextPageNumber,
+                    isLastPage = page.isLastPage
+                )
+            } catch (e: Exception) {
+                setError(e)
+            }
         }
     }
 )
 ```
 
-### Handle errors using `setError` ###
-```kotlin
-val paginationState = rememberPaginationState(
-    initialPageNumber = 1,
-    onRequestPage = { pageNumber: Int ->
-        scope.launch {
-            try {
-                val page = DataSource.getPage(pageNumber)
+## 2- Define your paginated `LazyColumn` ##
 
-                appendPage(
-                    items = page.items,
-                    isLastPage = page.isLastPage
-                )
-            } catch (e: Exception) {
-                setError(e)
-            }    
+### Provide your composables for every pagination state you would like to render ###
+
+```kotlin
+@Composable
+fun Content() {
+    val paginationState = ...
+    
+    PaginatedLazyColumn(
+        paginationState = paginationState,
+        firstPageProgressIndicator = { ... },
+        newPageProgressIndicator = { ... },
+        firstPageErrorIndicator = { e -> ... },
+        newPageErrorIndicator = { e -> ... },
+    ) {
+        itemsIndexed(
+            paginationState.allItems,
+        ) { _, item ->
+            Item(value = item)
         }
     }
-)
+}
 ```
 
 ### Retrying your last failed request can be through `retryLastFailedRequest` ###
@@ -141,20 +171,42 @@ paginationState.retryLastFailedRequest()
 
 ### Refreshing can be through `refresh` method ###
 ```kotlin
-paginationState.refresh(initialPageNumber = 1)
+paginationState.refresh(
+    initialPageKey = 1 // optional, defaults to the value provided when creating the state
+)
 ```
 
-## 2- Define your paginated `LazyColumn` ##
-
-### Provide your composables for every pagination state you would like to render ###
-
+**Altogether**
 ```kotlin
+val paginationState = rememberPaginationState<Int, Model>(
+    initialPageKey = 1,
+    onRequestPage = { pageKey: Int ->
+        scope.launch {
+            try {
+                val page = DataSource.getPage(pageNumber = pageKey, pageSize = 10)
+    
+                appendPage(
+                    items = page.items,
+                    nextPageKey = page.nextPageNumber,
+                    isLastPage = page.isLastPage
+                )
+            } catch (e: Exception) {
+                setError(e)
+            }
+        }
+    }
+)
+
 PaginatedLazyColumn(
     paginationState = paginationState,
     firstPageProgressIndicator = { ... },
     newPageProgressIndicator = { ... },
-    firstPageErrorIndicator = { e -> ... },
-    newPageErrorIndicator = { e -> ... },
+    firstPageErrorIndicator = { e ->
+        ... onRetry = { paginationState.retryLastFailedRequest() } ...
+    },
+    newPageErrorIndicator = { e ->
+        ... onRetry = { paginationState.retryLastFailedRequest() } ...
+    },
 ) {
     itemsIndexed(
         paginationState.allItems,
@@ -163,90 +215,55 @@ PaginatedLazyColumn(
     }
 }
 ```
-**Altogether**
->```kotlin
->val paginationState = rememberPaginationState(
->    initialPageNumber = 1,
->    onRequestPage = { pageNumber: Int ->
->        scope.launch {
->            try {
->                val page = DataSource.getPage(pageNumber)
->    
->                appendPage(
->                    items = page.items,
->                    isLastPage = page.isLastPage
->                )
->            } catch (e: Exception) {
->                setError(e)
->            }
->        }
->    }
->)
->
->PaginatedLazyColumn(
->    paginationState = paginationState,
->    firstPageProgressIndicator = { ... },
->    newPageProgressIndicator = { ... },
->    firstPageErrorIndicator = { e -> ... },
->    newPageErrorIndicator = { e -> ... },
->) {
->    itemsIndexed(
->        paginationState.allItems,
->    ) { _, item ->
->        Item(value = item)
->    }
->}
->
->```
 
 
 **An Example with a ViewModel**
->```kotlin
->class MyViewModel : ViewModel() {
->    val paginationState = PaginationState<Model>(
->        initialPageNumber = 1,
->        onRequestPage = { loadPage(it) }
->    )
->    
->    fun loadPage(pageNumber: Int) {
->        viewModelScope.launch {
->           try {
->               val page = DataSource.getPage(pageNumber)
->    
->               paginationState.appendPage(
->                   items = page.items,
->                   isLastPage = page.isLastPage
->               )
->           } catch (e: Exception) {
->               paginationState.setError(e)
->           }
->        }
->    }
->}
->
->@Composable
->fun Content(viewModel: MyViewModel) {
->    val paginationState = viewModel.paginationState
->
->    PaginatedLazyColumn(
->        paginationState = paginationState,
->        firstPageProgressIndicator = { ... },
->        newPageProgressIndicator = { ... },
->        firstPageErrorIndicator = { e ->
->            ... onRetry = { paginationState.retryLastFailedRequest() } ...
->        },
->        newPageErrorIndicator = { e ->
->            ... onRetry = { paginationState.retryLastFailedRequest() } ...
->        },
->    ) {
->        itemsIndexed(
->            paginationState.allItems,
->        ) { _, item ->
->            Item(value = item)
->        }
->    }
->}
->```
+```kotlin
+class MyViewModel : ViewModel() {
+    val paginationState = PaginationState<Int, Model>(
+       initialPageKey = 1,
+       onRequestPage = { loadPage(it) }
+    )
+    
+    fun loadPage(pageKey: Int) {
+       viewModelScope.launch {
+          try {
+              val page = DataSource.getPage(pageNumber = pageKey)
+    
+              paginationState.appendPage(
+                  items = page.items,
+                  isLastPage = page.isLastPage
+              )
+          } catch (e: Exception) {
+              paginationState.setError(e)
+          }
+       }
+    }
+}
+
+@Composable
+fun Content(viewModel: MyViewModel) {
+    val paginationState = viewModel.paginationState
+
+    PaginatedLazyColumn(
+       paginationState = paginationState,
+       firstPageProgressIndicator = { ... },
+       newPageProgressIndicator = { ... },
+       firstPageErrorIndicator = { e ->
+           ... onRetry = { paginationState.retryLastFailedRequest() } ...
+       },
+       newPageErrorIndicator = { e ->
+           ... onRetry = { paginationState.retryLastFailedRequest() } ...
+       },
+    ) {
+       itemsIndexed(
+           paginationState.allItems,
+       ) { _, item ->
+           Item(value = item)
+       }
+    }
+}
+```
 
 ### Full sample can be found in the [sample module](https://github.com/Ahmad-Hamwi/lazy-pagination-compose/tree/main/sample) ###
 

@@ -1,36 +1,36 @@
 package io.github.ahmad_hamwi.compose.pagination
 
-internal sealed class PaginationInternalState<T>(
-    open val initialPageNumber: Int,
+internal sealed class PaginationInternalState<KEY, T>(
+    open val initialPageKey: KEY,
     open val items: List<T>?,
 ) {
-    class Initial<T>(
-        override val initialPageNumber: Int,
+    class Initial<KEY, T>(
+        override val initialPageKey: KEY,
         override val items: List<T>? = null,
-    ) : PaginationInternalState<T>(initialPageNumber, null)
+    ) : PaginationInternalState<KEY, T>(initialPageKey, null)
 
-    class Loading<T>(
-        override val initialPageNumber: Int,
-        override val requestedPageNumber: Int,
+    class Loading<KEY, T>(
+        override val initialPageKey: KEY,
+        override val requestedPageKey: KEY,
         override val items: List<T>? = null,
-    ) : PaginationInternalState<T>(initialPageNumber, items), IHasRequestedPageNumber
+    ) : PaginationInternalState<KEY, T>(initialPageKey, items), IHasRequestedPageKey<KEY>
 
-    class Loaded<T>(
-        override val initialPageNumber: Int,
-        override val requestedPageNumber: Int,
-        val nextPageNumber: Int,
+    class Loaded<KEY, T>(
+        override val initialPageKey: KEY,
+        override val requestedPageKey: KEY,
+        val nextPageKey: KEY,
         override val items: List<T>,
         val isLastPage: Boolean,
-    ) : PaginationInternalState<T>(initialPageNumber, items), IHasRequestedPageNumber
+    ) : PaginationInternalState<KEY, T>(initialPageKey, items), IHasRequestedPageKey<KEY>
 
-    class Error<T>(
-        override val initialPageNumber: Int,
-        override val requestedPageNumber: Int,
+    class Error<KEY, T>(
+        override val initialPageKey: KEY,
+        override val requestedPageKey: KEY,
         val exception: Exception,
         override val items: List<T>? = null,
-    ) : PaginationInternalState<T>(initialPageNumber, items), IHasRequestedPageNumber
+    ) : PaginationInternalState<KEY, T>(initialPageKey, items), IHasRequestedPageKey<KEY>
 
-    interface IHasRequestedPageNumber {
-        val requestedPageNumber: Int
+    interface IHasRequestedPageKey<KEY> {
+        val requestedPageKey: KEY
     }
 }

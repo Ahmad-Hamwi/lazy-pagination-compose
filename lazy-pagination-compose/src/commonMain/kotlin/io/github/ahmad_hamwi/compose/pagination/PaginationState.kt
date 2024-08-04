@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 
 @Stable
 class PaginationState<T>(
-    internal val onRequestPage: (PaginationState<T>.(Int) -> Unit)? = null
+    internal val onRequestPage: PaginationState<T>.(Int) -> Unit
 ) {
     internal var internalState =
         mutableStateOf<PaginationInternalState<T>>(PaginationInternalState.Initial())

@@ -270,7 +270,7 @@ fun Content(viewModel: MyViewModel) {
 # Contributing #
 This library is made to help other developers out in their app developments, feel free to contribute by suggesting ideas and creating issues and PRs that would make this repository more helpful.
 
-# License #
+# Support #
 You can show support by either contributing to the repository or by buying me a cup of coffee!
 
 <p>

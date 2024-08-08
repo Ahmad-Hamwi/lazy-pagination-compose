@@ -7,7 +7,7 @@
 <br>
 
 <p align="center">
-    An intuitive and customizable Compose Multiplatform pagination solution built on top of lazy lists (Currently LazyColumn) and handles pagination states automatically as you scroll.
+    An intuitive and customizable Compose Multiplatform pagination solution built on top of lazy lists and handles pagination states automatically as you scroll.
 </p>
 <p align="center">
     Available on Android, iOS, and JVM Desktop
@@ -15,11 +15,13 @@
 
 ## What to expect? ##
 
-The library is build on top of lazy composables such as `LazyColumn` and it extends its API ot be `PaginatedLazyColumn`, and provides you with a custom `PaginationState` that you can control in your Compose UI or in a ViewModel to handle different pagination states as the user scroll.
+The library is build on top of lazy composables such as `LazyColumn` & `LazyRow` and it extends its API ot be `PaginatedLazyColumn` & `PaginatedLazyRow`, and provides you with a custom `PaginationState` that you can control in your Compose UI or in a ViewModel to handle different pagination states as the user scroll.
 
 ## Available on Android, iOS, and Desktop ##
 
 In a Compose Multiplaform Project, You can now add your composable to the `commonMain` source set only
+
+# `PaginatedLazyColumn`: #
 
 <p>
     <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDZtN3dzajNicXpxZjYwNWdlMTZuNmEydzJqeXI4bzhlZThmYmVyayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UQtqa7NP2DedMIQQE0/giphy.gif" width="27%" align="top" />
@@ -27,6 +29,13 @@ In a Compose Multiplaform Project, You can now add your composable to the `commo
     <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3ozdXpubDA2enptdW81aHhucndpZ2Y2MGw5cTFuMmNneDcxM3JocyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/RxUB3WW69I3N65pQuv/giphy.gif" width="45.5%" align="top" />
 </p>
 
+# `PaginatedLazyRow`: #
+
+<p>
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExODIwZHduaXhhaGN6MWUxb3luZHlqN2xvMm9vNDBmcGoyNzF4bnhnYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Tv7k3mPfmkDzss8EBk/giphy.gif" width="27%" align="top" />
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXg2NXp1bHlmbWV1OXB0Nzd0eTRrOXV0eGo1eHRvZXA2Nmg3ejQ0dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/U0EhwO1KN5keyfBFH1/giphy.gif" width="25.62%" align="top" />
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2M3cWV3MWFtbGQxMmhmaWx1ejRtYnVoM202bHN0NzRiMnVyYW8xYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BfuyEzSm7ZcH6A4sYj/giphy.gif" width="45.5%" align="top" />
+</p>
 
 # Setup #
 
@@ -70,9 +79,9 @@ For an Android Project use `io.github.ahmad-hamwi:lazy-pagination-compose-androi
 
 ### Full sample can be found in the [sample module](https://github.com/Ahmad-Hamwi/lazy-pagination-compose/tree/main/sample) ###
 
-## 1- Initilize your pagination state ##
+## 1- Prepare your pagination state ##
 
-### Create a `PaginationState` by remembering it in your composable or creating it to your ViewModel.
+### Create a `PaginationState` by remembering it in your composable or holding it in your ViewModel.
 
 ```kotlin
 // Int is the key which in this example represents the page number
@@ -139,7 +148,7 @@ val paginationState = rememberPaginationState<Int, Model>(
 )
 ```
 
-## 2- Define your paginated `LazyColumn` ##
+## 2- Define your paginated lazy list `PaginatedLazyColumn` or `PaginatedLazyRow` ##
 
 ### Provide your composables for every pagination state you would like to render ###
 
@@ -148,6 +157,7 @@ val paginationState = rememberPaginationState<Int, Model>(
 fun Content() {
     val paginationState = ...
     
+    // Or PaginatedLazyRow
     PaginatedLazyColumn(
         paginationState = paginationState,
         firstPageProgressIndicator = { ... },
@@ -197,6 +207,7 @@ val paginationState = rememberPaginationState<Int, Model>(
     }
 )
 
+// Or PaginatedLazyRow
 PaginatedLazyColumn(
     paginationState = paginationState,
     firstPageProgressIndicator = { ... },
@@ -245,6 +256,7 @@ class MyViewModel : ViewModel() {
 fun Content(viewModel: MyViewModel) {
     val paginationState = viewModel.paginationState
 
+    // Or PaginatedLazyRow
     PaginatedLazyColumn(
        paginationState = paginationState,
        firstPageProgressIndicator = { ... },

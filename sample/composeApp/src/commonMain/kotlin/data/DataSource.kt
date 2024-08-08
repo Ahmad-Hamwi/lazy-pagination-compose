@@ -2,9 +2,9 @@ package data
 
 import kotlinx.coroutines.delay
 
-class DataSource {
+class DataSource(private val fastLoad: Boolean = false) {
     private val attemptsMap = mapOf(
-        1 to "error",
+        1 to if (fastLoad) "success" else "error",
         2 to "success",
         3 to "error",
         4 to "success",
@@ -17,7 +17,9 @@ class DataSource {
     suspend fun getPage(pageNumber: Int): MyPageModel<String> {
         attempts++
 
-        delay(1200)
+        if (!fastLoad || attempts != 1) {
+            delay(1200)
+        }
 
         if (attemptsMap[attempts] == "error") {
             throw Exception("Something went wrong.\nTry again.")
@@ -30,5 +32,3 @@ class DataSource {
         }
     }
 }
-
-val dataSource = DataSource()

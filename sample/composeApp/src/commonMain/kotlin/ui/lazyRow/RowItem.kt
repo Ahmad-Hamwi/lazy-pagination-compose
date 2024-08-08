@@ -1,9 +1,10 @@
-package ui.lazyColumn
+package ui.lazyRow
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -14,16 +15,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Item(value: String) {
+fun RowItem(modifier: Modifier = Modifier, value: String) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colors.primary,
                 shape = RoundedCornerShape(10.dp)
             )
-            .fillMaxWidth()
-            .padding(vertical = 48.dp, horizontal = 16.dp),
+            .padding(vertical = 16.dp, horizontal = 16.dp)
+            .width(128.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(text = value, fontWeight = FontWeight.Bold)

@@ -1,4 +1,5 @@
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -10,8 +11,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import ui.lazyColumn.Content
+import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import ui.lazyColumn.PaginatedLazyColumnSampleContent
+import ui.lazyRow.PaginatedLazyRowSampleContent
 
 @Composable
 @Preview
@@ -20,7 +23,7 @@ fun App() {
         Scaffold(
             topBar = { TopBar() }
         ) {
-            Content(
+            PaginatedLazyColumnSampleContent(
                 modifier = Modifier.padding(it)
             )
         }

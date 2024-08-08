@@ -17,11 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-object LazyListKeys {
-    const val NEW_PAGE_PROGRESS_INDICATOR_KEY = "newPageProgressIndicatorKey"
-    const val NEW_PAGE_ERROR_INDICATOR_KEY = "newPageErrorIndicatorKey"
-}
-
 @Suppress("UNCHECKED_CAST")
 @Composable
 fun <KEY, T> PaginatedLazyColumn(

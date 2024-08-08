@@ -4,15 +4,11 @@ import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -35,53 +31,13 @@ fun <KEY, T> PaginatedLazyRow(
     userScrollEnabled: Boolean = true,
     content: LazyListScope.() -> Unit,
 ) {
-    var internalState by paginationState.internalState
-
-    LaunchedEffect(internalState) {
-        (internalState as? PaginationInternalState.Loading)?.also {
-            paginationState.run {
-                onRequestPage.invoke(this, it.requestedPageKey)
-            }
-        }
-    }
-
-    if (internalState is PaginationInternalState.Loading && internalState.items == null) {
-        firstPageProgressIndicator()
-    }
-
-    if (internalState is PaginationInternalState.Error && internalState.items == null) {
-        firstPageErrorIndicator(
-            (internalState as PaginationInternalState.Error).exception
-        )
-    }
-
-    if (internalState.items != null) {
-        LaunchedEffect(state) {
-            snapshotFlow { state.layoutInfo.visibleItemsInfo.lastOrNull() }.collect { firstVisibleItemIndex ->
-                val hasReachedLastItem = (firstVisibleItemIndex?.index ?: Int.MIN_VALUE) >=
-                        (internalState.items?.lastIndex ?: Int.MAX_VALUE)
-
-                val isLastPage =
-                    (internalState as? PaginationInternalState.Loaded)?.isLastPage != false
-
-                val newlyRequestedPageKey =
-                    (internalState as? PaginationInternalState.Loaded)?.nextPageKey
-
-                val previouslyRequestedPageKey =
-                    (internalState as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
-
-                if (hasReachedLastItem && !isLastPage) {
-                    internalState = PaginationInternalState.Loading(
-                        initialPageKey = internalState.initialPageKey,
-                        requestedPageKey = newlyRequestedPageKey
-                            ?: previouslyRequestedPageKey
-                            ?: internalState.initialPageKey,
-                        items = internalState.items
-                    )
-                }
-            }
-        }
-
+    PaginatedLazyList(
+        paginationState,
+        modifier,
+        firstPageProgressIndicator,
+        newPageProgressIndicator,
+        firstPageErrorIndicator,
+    ) { internalState ->
         LazyRow(
             modifier = modifier,
             state = state,
@@ -115,19 +71,6 @@ fun <KEY, T> PaginatedLazyRow(
                     )
                 }
             }
-        }
-    }
-
-    LaunchedEffect(internalState) {
-        if (internalState is PaginationInternalState.Initial) {
-            val requestedPageKey =
-                (internalState as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
-
-            internalState = PaginationInternalState.Loading(
-                initialPageKey = internalState.initialPageKey,
-                requestedPageKey = requestedPageKey ?: internalState.initialPageKey,
-                items = internalState.items
-            )
         }
     }
 }

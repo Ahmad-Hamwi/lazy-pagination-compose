@@ -1,3 +1,5 @@
+package data
+
 import kotlinx.coroutines.delay
 
 class DataSource {
@@ -28,3 +30,5 @@ class DataSource {
         }
     }
 }
+
+val dataSource = DataSource()

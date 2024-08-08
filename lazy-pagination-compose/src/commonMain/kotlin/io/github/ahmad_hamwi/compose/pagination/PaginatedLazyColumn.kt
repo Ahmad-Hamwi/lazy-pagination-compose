@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@Suppress("UNCHECKED_CAST")
 @Composable
 fun <KEY, T> PaginatedLazyColumn(
     paginationState: PaginationState<KEY, T>,
@@ -39,7 +38,7 @@ fun <KEY, T> PaginatedLazyColumn(
         firstPageErrorIndicator,
         newPageErrorIndicator,
         state,
-    ) { internalState ->
+    ) { paginatedItemsHandler ->
         LazyColumn(
             modifier = modifier,
             state = state,
@@ -50,28 +49,8 @@ fun <KEY, T> PaginatedLazyColumn(
             flingBehavior = flingBehavior,
             userScrollEnabled = userScrollEnabled,
         ) {
-            val internalStateRef = internalState
-
-            if (internalStateRef.items != null) {
+            paginatedItemsHandler {
                 content()
-            }
-
-            if (internalStateRef is PaginationInternalState.Loading) {
-                item(
-                    key = LazyListKeys.NEW_PAGE_PROGRESS_INDICATOR_KEY
-                ) {
-                    newPageProgressIndicator()
-                }
-            }
-
-            if (internalStateRef is PaginationInternalState.Error) {
-                item(
-                    key = LazyListKeys.NEW_PAGE_ERROR_INDICATOR_KEY
-                ) {
-                    newPageErrorIndicator(
-                        internalStateRef.exception
-                    )
-                }
             }
         }
     }

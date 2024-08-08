@@ -1,13 +1,19 @@
 package io.github.ahmad_hamwi.compose.pagination
 
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+
+internal typealias LazyList = @Composable (PaginatedItemsHandler) -> Unit
+
+internal typealias PaginatedItemsHandler = LazyListScope.(ClientLoadedContent) -> Unit
+
+internal typealias ClientLoadedContent = LazyListScope.() -> Unit
 
 @Suppress("UNCHECKED_CAST")
 @Composable
@@ -18,8 +24,8 @@ internal fun <KEY, T> PaginatedLazyList(
     newPageProgressIndicator: @Composable () -> Unit = {},
     firstPageErrorIndicator: @Composable (e: Exception) -> Unit = {},
     newPageErrorIndicator: @Composable (e: Exception) -> Unit = {},
-    state: LazyListState = rememberLazyListState(),
-    concreteLazyList: @Composable (PaginationInternalState<KEY, T>) -> Unit,
+    state: LazyListState,
+    concreteLazyList: LazyList,
 ) {
     var internalState by paginationState.internalState
 
@@ -68,7 +74,31 @@ internal fun <KEY, T> PaginatedLazyList(
             }
         }
 
-        concreteLazyList(internalState)
+        concreteLazyList { clientContent ->
+            val internalStateRef = internalState
+
+            if (internalStateRef.items != null) {
+                clientContent()
+            }
+
+            if (internalStateRef is PaginationInternalState.Loading) {
+                item(
+                    key = LazyListKeys.NEW_PAGE_PROGRESS_INDICATOR_KEY
+                ) {
+                    newPageProgressIndicator()
+                }
+            }
+
+            if (internalStateRef is PaginationInternalState.Error) {
+                item(
+                    key = LazyListKeys.NEW_PAGE_ERROR_INDICATOR_KEY
+                ) {
+                    newPageErrorIndicator(
+                        internalStateRef.exception
+                    )
+                }
+            }
+        }
     }
 
     LaunchedEffect(internalState) {

@@ -37,7 +37,9 @@ fun <KEY, T> PaginatedLazyRow(
         firstPageProgressIndicator,
         newPageProgressIndicator,
         firstPageErrorIndicator,
-    ) { internalState ->
+        newPageErrorIndicator,
+        state,
+    ) { paginatedItemsHandler ->
         LazyRow(
             modifier = modifier,
             state = state,
@@ -48,28 +50,8 @@ fun <KEY, T> PaginatedLazyRow(
             flingBehavior = flingBehavior,
             userScrollEnabled = userScrollEnabled,
         ) {
-            val internalStateRef = internalState
-
-            if (internalStateRef.items != null) {
+            paginatedItemsHandler {
                 content()
-            }
-
-            if (internalStateRef is PaginationInternalState.Loading) {
-                item(
-                    key = LazyListKeys.NEW_PAGE_PROGRESS_INDICATOR_KEY
-                ) {
-                    newPageProgressIndicator()
-                }
-            }
-
-            if (internalStateRef is PaginationInternalState.Error) {
-                item(
-                    key = LazyListKeys.NEW_PAGE_ERROR_INDICATOR_KEY
-                ) {
-                    newPageErrorIndicator(
-                        internalStateRef.exception
-                    )
-                }
             }
         }
     }

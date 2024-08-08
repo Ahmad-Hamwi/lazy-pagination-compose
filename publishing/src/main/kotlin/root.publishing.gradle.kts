@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     group = "io.github.ahmad-hamwi"
-    version = "1.1.4"
+    version = "1.2.4"
 }
 
 nexusPublishing {

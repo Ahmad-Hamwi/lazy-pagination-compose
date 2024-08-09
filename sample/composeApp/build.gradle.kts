@@ -18,7 +18,13 @@ kotlin {
     }
     
     jvm("desktop")
-    
+
+    js {
+        browser()
+        binaries.executable()
+    }
+
+
     listOf(
         iosX64(),
         iosArm64(),

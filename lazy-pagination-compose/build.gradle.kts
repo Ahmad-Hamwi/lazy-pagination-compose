@@ -1,6 +1,7 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.ir.backend.js.compile
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -22,6 +23,11 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
+
+    js {
+        browser()
+        binaries.executable()
+    }
 
     sourceSets {
         jvmMain.dependencies {

@@ -25,7 +25,9 @@ jobs:
             os: macos-latest
           - target: publishJvmPublicationToSonatypeRepository
             os: ubuntu-latest
-          - target: publishKotlinMultiplatformPublicationToSonatypeRepository
+          - target: publishJsPublicationToSonatypeRepository
+            os: ubuntu-latest
+          - target: publishWasmJsPublicationToSonatypeRepository
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
     steps:

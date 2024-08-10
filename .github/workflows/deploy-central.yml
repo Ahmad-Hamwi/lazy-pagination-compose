@@ -29,6 +29,8 @@ jobs:
             os: ubuntu-latest
           - target: publishWasmJsPublicationToSonatypeRepository
             os: ubuntu-latest
+          - target: publishKotlinMultiplatformPublicationToSonatypeRepository
+            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3

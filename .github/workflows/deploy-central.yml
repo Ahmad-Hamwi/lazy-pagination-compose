@@ -1,4 +1,4 @@
-name: Deploy to central
+name: Maven Central Publishing
 
 on:
   push:

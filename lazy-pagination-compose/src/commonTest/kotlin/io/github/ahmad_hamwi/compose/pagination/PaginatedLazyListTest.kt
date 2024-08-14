@@ -225,7 +225,7 @@ abstract class PaginatedLazyListTest {
         state.appendPage(items = listOf("", "", "", "", ""), nextPageKey = 2, isLastPage = false)
         onNodeWithTag(LAZY_LIST_TAG).performScrollToIndex(4)
         waitForIdle()
-        state.appendPage(items = listOf("", "", "", "", ""), nextPageKey = 3, isLastPage = false)
+        state.appendPage(items = listOf("", "", "", "", ""), nextPageKey = 3, isLastPage = true)
         waitForIdle()
 
         assertThat(pageKeysCalled).isEqualTo(listOf(1, 2))

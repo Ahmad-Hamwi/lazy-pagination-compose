@@ -33,7 +33,7 @@ abstract class PaginatedLazyListTest {
         onRequestPage = {onRequestPage(it) }
     )
 
-    open fun `first page progress indicator shown when null page`() = runComposeUiTest {
+    open fun firstPageProgressIndicatorShownWhenNullPage() = runComposeUiTest {
         val pageKeysCalled = mutableListOf<Int>()
 
         val state = defaultPaginationState { pageKey ->
@@ -46,7 +46,7 @@ abstract class PaginatedLazyListTest {
         assertThat(pageKeysCalled).isEqualTo(listOf(1))
     }
 
-    open fun `first page progress indicator hidden when a page has been appended`() = runComposeUiTest {
+    open fun firstPageProgressIndicatorHiddenWhenAPageHasBeenAppended() = runComposeUiTest {
         val pageKeysCalled = mutableListOf<Int>()
 
         val paginationState = defaultPaginationState { pageKeyCalled ->
@@ -61,7 +61,7 @@ abstract class PaginatedLazyListTest {
         assertThat(pageKeysCalled).isEqualTo(listOf(1))
     }
 
-    open fun `first page error is shown when no page and error happened`() = runComposeUiTest {
+    open fun firstPageErrorIsShownWhenNoPageAndErrorHappened() = runComposeUiTest {
         val pageKeysCalled = mutableListOf<Int>()
         val state = defaultPaginationState { pageKey ->
             pageKeysCalled += pageKey
@@ -78,7 +78,7 @@ abstract class PaginatedLazyListTest {
         assertThat(pageKeysCalled).isEqualTo(listOf(1))
     }
 
-    open fun `first page is shown when put page is triggered for the first time`() = runComposeUiTest {
+    open fun firstPageIsShownWhenPutPageIsTriggeredForTheFirstTime() = runComposeUiTest {
         val pageKeysCalled = mutableListOf<Int>()
         val state = defaultPaginationState { pageKey ->
             pageKeysCalled += pageKey
@@ -92,7 +92,7 @@ abstract class PaginatedLazyListTest {
         assertThat(pageKeysCalled).isEqualTo(listOf(1))
     }
 
-    open fun `scrolling down the list will show progress and trigger page request`() = runComposeUiTest {
+    open fun scrollingDownTheListWillShowProgressAndTriggerPageRequest() = runComposeUiTest {
         val pageKeysCalled = mutableListOf<Int>()
         val state = defaultPaginationState { pageKey ->
             pageKeysCalled += pageKey
@@ -109,7 +109,7 @@ abstract class PaginatedLazyListTest {
         assertThat(pageKeysCalled).isEqualTo(listOf(1, 2))
     }
 
-    open fun `scrolling down the list will show error and trigger page request`() = runComposeUiTest {
+    open fun scrollingDownTheListWillShowErrorAndTriggerPageRequest() = runComposeUiTest {
         val pageKeysCalled = mutableListOf<Int>()
         val state = defaultPaginationState { pageKey ->
             pageKeysCalled += pageKey
@@ -129,7 +129,7 @@ abstract class PaginatedLazyListTest {
     }
 
 
-    open fun `appending last page prevents loading and new page requests`() = runComposeUiTest {
+    open fun appendingLastPagePreventsLoadingAndNewPageRequests() = runComposeUiTest {
         val pageKeysCalled = mutableListOf<Int>()
         val state = defaultPaginationState { pageKeysCalled += it }
 
@@ -141,7 +141,7 @@ abstract class PaginatedLazyListTest {
         assertThat(pageKeysCalled).isEqualTo(listOf(1))
     }
 
-    open fun `retry first failed request would request again the same page and show progress`() =
+    open fun retryFirstFailedRequestWouldRequestAgainTheSamePageAndShowProgress() =
         runComposeUiTest {
             val pageKeysCalled = mutableListOf<Int>()
 
@@ -155,7 +155,7 @@ abstract class PaginatedLazyListTest {
             assertThat(pageKeysCalled).isEqualTo(listOf(1, 1))
         }
 
-    open fun `retry new page failed request would request again the same page and show progress`() =
+    open fun retryNewPageFailedRequestWouldRequestAgainTheSamePageAndShowProgress() =
         runComposeUiTest {
             val pageKeysCalled = mutableListOf<Int>()
 
@@ -172,7 +172,7 @@ abstract class PaginatedLazyListTest {
             assertThat(pageKeysCalled).isEqualTo(listOf(1, 2))
         }
 
-    open fun `Refreshing resets the state and an initial load starts`() = runComposeUiTest {
+    open fun refreshingResetsTheStateAndAnInitialLoadStarts() = runComposeUiTest {
         val pageKeysCalled = mutableListOf<Int>()
         val state = defaultPaginationState { pageKeysCalled += it }
 
@@ -184,7 +184,7 @@ abstract class PaginatedLazyListTest {
         assertThat(pageKeysCalled).isEqualTo(listOf(1, 1))
     }
 
-    open fun `first page error then refresh then first page requested again then show first page`() =
+    open fun firstPageErrorThenRefreshThenFirstPageRequestedAgainThenShowFirstPage() =
         runComposeUiTest {
             val pageKeysCalled = mutableListOf<Int>()
             val state = defaultPaginationState { pageKeysCalled += it }
@@ -201,7 +201,7 @@ abstract class PaginatedLazyListTest {
             assertThat(pageKeysCalled).isEqualTo(listOf(1))
         }
 
-    open fun `first page loaded then refresh then first page requested again then show first page`() =
+    open fun firstPageLoadedThenRefreshThenFirstPageRequestedAgainThenShowFirstPage() =
         runComposeUiTest {
             val pageKeysCalled = mutableListOf<Int>()
             val state = defaultPaginationState { pageKeysCalled += it }
@@ -217,7 +217,7 @@ abstract class PaginatedLazyListTest {
             assertThat(pageKeysCalled).isEqualTo(listOf(1))
         }
 
-    open fun `loads only one page after a scroll`() = runComposeUiTest {
+    open fun loadsOnlyOnePageAfterAScroll() = runComposeUiTest {
         val pageKeysCalled = mutableListOf<Int>()
         val state = defaultPaginationState { pageKeysCalled += it }
 
@@ -231,7 +231,7 @@ abstract class PaginatedLazyListTest {
         assertThat(pageKeysCalled).isEqualTo(listOf(1, 2))
     }
 
-    open fun `initial page is 2 would load page 2`() = runComposeUiTest {
+    open fun initialPageIs2WouldLoadPage2() = runComposeUiTest {
         var pageKeyCalled: Int? = null
 
         val state = PaginationState<Int, String>(
@@ -246,7 +246,7 @@ abstract class PaginatedLazyListTest {
         assertThat(pageKeyCalled).isEqualTo(2)
     }
 
-    open fun `refreshing with initial page of 2 would load page 2`() = runComposeUiTest {
+    open fun refreshingWithInitialPageOf2WouldLoadPage2() = runComposeUiTest {
         var pageKeyCalled: Int? = null
 
         val state = PaginationState<Int, String>(

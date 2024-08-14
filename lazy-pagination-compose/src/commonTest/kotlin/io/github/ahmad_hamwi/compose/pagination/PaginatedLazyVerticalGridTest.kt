@@ -54,62 +54,62 @@ class PaginatedLazyVerticalGridTest : PaginatedLazyListTest() {
     }
 
     @Test
-    override fun `first page progress indicator shown when null page`() =
-        super.`first page progress indicator shown when null page`()
+    override fun firstPageProgressIndicatorShownWhenNullPage() =
+        super.firstPageProgressIndicatorShownWhenNullPage()
 
     @Test
-    override fun `first page progress indicator hidden when a page has been appended`() =
-        super.`first page progress indicator hidden when a page has been appended`()
+    override fun firstPageProgressIndicatorHiddenWhenAPageHasBeenAppended() =
+        super.firstPageProgressIndicatorHiddenWhenAPageHasBeenAppended()
 
     @Test
-    override fun `first page error is shown when no page and error happened`() =
-        super.`first page error is shown when no page and error happened`()
+    override fun firstPageErrorIsShownWhenNoPageAndErrorHappened() =
+        super.firstPageErrorIsShownWhenNoPageAndErrorHappened()
 
     @Test
-    override fun `first page is shown when put page is triggered for the first time`() =
-        super.`first page is shown when put page is triggered for the first time`()
+    override fun firstPageIsShownWhenPutPageIsTriggeredForTheFirstTime() =
+        super.firstPageIsShownWhenPutPageIsTriggeredForTheFirstTime()
 
     @Test
-    override fun `scrolling down the list will show progress and trigger page request`() =
-        super.`scrolling down the list will show progress and trigger page request`()
+    override fun scrollingDownTheListWillShowProgressAndTriggerPageRequest() =
+        super.scrollingDownTheListWillShowProgressAndTriggerPageRequest()
 
     @Test
-    override fun `scrolling down the list will show error and trigger page request`() =
-        super.`scrolling down the list will show error and trigger page request`()
+    override fun scrollingDownTheListWillShowErrorAndTriggerPageRequest() =
+        super.scrollingDownTheListWillShowErrorAndTriggerPageRequest()
 
     @Test
-    override fun `appending last page prevents loading and new page requests`() =
-        super.`appending last page prevents loading and new page requests`()
+    override fun appendingLastPagePreventsLoadingAndNewPageRequests() =
+        super.appendingLastPagePreventsLoadingAndNewPageRequests()
 
     @Test
-    override fun `retry first failed request would request again the same page and show progress`() =
-        super.`retry first failed request would request again the same page and show progress`()
+    override fun retryFirstFailedRequestWouldRequestAgainTheSamePageAndShowProgress() =
+        super.retryFirstFailedRequestWouldRequestAgainTheSamePageAndShowProgress()
 
     @Test
-    override fun `retry new page failed request would request again the same page and show progress`() =
-        super.`retry new page failed request would request again the same page and show progress`()
+    override fun retryNewPageFailedRequestWouldRequestAgainTheSamePageAndShowProgress() =
+        super.retryNewPageFailedRequestWouldRequestAgainTheSamePageAndShowProgress()
 
     @Test
-    override fun `Refreshing resets the state and an initial load starts`() =
-        super.`Refreshing resets the state and an initial load starts`()
+    override fun refreshingResetsTheStateAndAnInitialLoadStarts() =
+        super.refreshingResetsTheStateAndAnInitialLoadStarts()
 
     @Test
-    override fun `first page error then refresh then first page requested again then show first page`() =
-        super.`first page error then refresh then first page requested again then show first page`()
+    override fun firstPageErrorThenRefreshThenFirstPageRequestedAgainThenShowFirstPage() =
+        super.firstPageErrorThenRefreshThenFirstPageRequestedAgainThenShowFirstPage()
 
     @Test
-    override fun `first page loaded then refresh then first page requested again then show first page`() =
-        super.`first page loaded then refresh then first page requested again then show first page`()
+    override fun firstPageLoadedThenRefreshThenFirstPageRequestedAgainThenShowFirstPage() =
+        super.firstPageLoadedThenRefreshThenFirstPageRequestedAgainThenShowFirstPage()
 
     @Test
-    override fun `loads only one page after a scroll`() =
-        super.`loads only one page after a scroll`()
+    override fun loadsOnlyOnePageAfterAScroll() =
+        super.loadsOnlyOnePageAfterAScroll()
 
     @Test
-    override fun `initial page is 2 would load page 2`() =
-        super.`initial page is 2 would load page 2`()
+    override fun initialPageIs2WouldLoadPage2() =
+        super.initialPageIs2WouldLoadPage2()
 
     @Test
-    override fun `refreshing with initial page of 2 would load page 2`() =
-        super.`refreshing with initial page of 2 would load page 2`()
+    override fun refreshingWithInitialPageOf2WouldLoadPage2() =
+        super.refreshingWithInitialPageOf2WouldLoadPage2()
 }

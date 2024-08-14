@@ -2,7 +2,7 @@ package data
 
 import kotlinx.coroutines.delay
 
-class DataSource(private val fastLoad: Boolean = false) {
+class DataSource(private val fastLoad: Boolean = false, private val itemsCount: Int = 10) {
     private val attemptsMap = mapOf(
         1 to if (fastLoad) "success" else "error",
         2 to "success",
@@ -17,6 +17,7 @@ class DataSource(private val fastLoad: Boolean = false) {
     suspend fun getPage(pageNumber: Int): MyPageModel<String> {
         attempts++
 
+        // For demo purposes
         if (!fastLoad || attempts != 1) {
             delay(1200)
         }
@@ -26,7 +27,7 @@ class DataSource(private val fastLoad: Boolean = false) {
         } else {
             return MyPageModel(
                 pageNumber,
-                (((pageNumber - 1) * 10 + 1)..(pageNumber * 10)).map { "Item $it" },
+                (((pageNumber - 1) * itemsCount + 1)..(pageNumber * itemsCount)).map { "Item $it" },
                 pageNumber == totalPagesCount
             )
         }

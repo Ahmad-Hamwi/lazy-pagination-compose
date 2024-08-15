@@ -2,7 +2,7 @@
 
 <p align="center">
     <a href="https://opensource.org/licenses/MIT"><img alt="API" src="https://img.shields.io/badge/License-MIT-blue.svg"/></a>
-    <a href="https://maven-badges.herokuapp.com/maven-central/io.github.ahmad-hamwi/lazy-pagination-compose"><img alt="API" src="https://maven-badges.herokuapp.com/maven-central/io.github.ahmad-hamwi/lazy-pagination-compose/badge.svg"/></a>
+    <img alt="API" src="https://img.shields.io/maven-central/v/io.github.ahmad-hamwi/lazy-pagination-compose"/>
     <a href="http://kotlinlang.org"><img alt="API" src="https://img.shields.io/badge/kotlin-2.0.0-blue.svg?logo=kotlin"/></a>
     <img alt="API" src="https://github.com/Ahmad-Hamwi/lazy-pagination-compose/actions/workflows/unit-test.yml/badge.svg"/>
     <img alt="API" src="https://github.com/Ahmad-Hamwi/lazy-pagination-compose/actions/workflows/deploy-central.yml/badge.svg"/>
@@ -259,7 +259,7 @@ Get the latest version via Maven Central:
 
 > (badge may not always be up to date, use the toml declaration for the latest release)
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.ahmad-hamwi/lazy-pagination-compose/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.ahmad-hamwi/lazy-pagination-compose)
+![Maven Central Version](https://img.shields.io/maven-central/v/io.github.ahmad-hamwi/lazy-pagination-compose)
 
 Add Maven Central repository to your root build.gradle at the end of repositories:
 

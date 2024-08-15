@@ -19,6 +19,8 @@ jobs:
             os: macos-latest
           - target: jvmTest
             os: ubuntu-latest
+          - target: wasmJsBrowserTest
+            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 
     steps:

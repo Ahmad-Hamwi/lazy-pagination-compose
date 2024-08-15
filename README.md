@@ -19,7 +19,9 @@
 </p>
 <br>
 
-An intuitive and customizable Compose Multiplatform pagination solution built on top of lazy lists such as `LazyColumn` & `LazyRow` and it extends their APIs.
+An intuitive and customizable Compose Multiplatform pagination solution built on top of lazy composables and it extends their APIs.
+
+Basically prefix your lazy composables such as `LazyColumn` or `LazyVerticalGrid` and more to add pagination support!
 
 Two points where in mind while creating this library:
 - Should have a simple and intuitive APIs with an easy learning curve.
@@ -27,11 +29,17 @@ Two points where in mind while creating this library:
 
 ## Features ##
 
-- Vertical & horizontal pagination using `PaginatedLazyColumn` & `PaginatedLazyRow`.
-- Seamless integration with a `PaginationState` that you use along with your data layer.  
-- Generic fetching strategies such as offset-based, cursor-based, time-based, etc...
+- Vertical & horizontal lists pagination using `PaginatedLazyColumn` & `PaginatedLazyRow` with the same original APIs.
+- Vertical & horizontal grids pagination using `PaginatedLazyVerticalGrid` & `PaginatedLazyHorizontalGrid` with the same original APIs.
+- Seamlessly integrate your pagination state with your your data layer.  
+- Generic fetching strategies such as 
+[offset-based](https://developer.box.com/guides/api-calls/pagination/offset-based/), 
+[cursor-based](https://jsonapi.org/profiles/ethanresnick/cursor-pagination/), 
+[time-based](https://developers.facebook.com/docs/graph-api/results/), etc...
 - Resetting your pagination state using `refresh()` function
 - Retrying your data fetches using `retryLastFailedRequest()` function
+
+## Paginated Composables ##
 
 ### `PaginatedLazyColumn`: ###
 
@@ -41,6 +49,33 @@ Two points where in mind while creating this library:
     <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3ozdXpubDA2enptdW81aHhucndpZ2Y2MGw5cTFuMmNneDcxM3JocyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/RxUB3WW69I3N65pQuv/giphy.gif" width="45.5%" align="top" />
 </p>
 
+<details open>
+    <summary> 
+        <h3>Composable</h3> 
+    </summary>
+
+```kotlin
+PaginatedLazyColumn(
+    paginationState = paginationState,
+    firstPageProgressIndicator = { ... },
+    newPageProgressIndicator = { ... },
+    firstPageErrorIndicator = { e -> // from setError
+        ... e.message ...
+        ... onRetry = { paginationState.retryLastFailedRequest() } ...
+    },
+    newPageErrorIndicator = { e -> ... },
+    // The rest of LazyColumn params
+) {
+    itemsIndexed(
+        paginationState.allItems,
+    ) { _, item ->
+        Item(value = item)
+    }
+}
+```
+
+</details>
+
 ### `PaginatedLazyRow`: ###
 
 <p>
@@ -49,11 +84,104 @@ Two points where in mind while creating this library:
     <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2M3cWV3MWFtbGQxMmhmaWx1ejRtYnVoM202bHN0NzRiMnVyYW8xYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BfuyEzSm7ZcH6A4sYj/giphy.gif" width="45.5%" align="top" />
 </p>
 
+<details open>
+    <summary> 
+        <h3>Composable</h3> 
+    </summary>
 
+```kotlin
+PaginatedLazyRow(
+    paginationState = paginationState,
+    firstPageProgressIndicator = { ... },
+    newPageProgressIndicator = { ... },
+    firstPageErrorIndicator = { e -> // from setError
+        ... e.message ...
+        ... onRetry = { paginationState.retryLastFailedRequest() } ...
+    },
+    newPageErrorIndicator = { e -> ... },
+    ... // The rest of LazyRow params
+) {
+    itemsIndexed(
+        paginationState.allItems,
+    ) { _, item ->
+        Item(value = item)
+    }
+}
+```
+
+</details>
+
+### `PaginatedLazyVerticalGrid`: ###
+
+<p>
+    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjd3aXdsdWJyODhpY3Ayd2swYTFzYmxiejRiNTI1bzh5b2U2aTJoYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VW3CpfV7F5TmUXYRnA/giphy.gif" width="27%" align="top" />
+    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTByb3Q3Mmc4dm9hc2Vtb3RhaWM2M25hejduYTEwNnplNGt3dG5pNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ozegucGVk85Le0h0AA/giphy.gif" width="25.62%" align="top" />
+    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWZqMHUzMno3cGVleHN4ZXJ5Y3JudWowaGJqdjN6cGk1eW4xbHFjaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Jeh0aYUdtRGPqGU2LW/giphy.gif" width="45.5%" align="top">
+</p>
+
+<details open>
+    <summary> 
+        <h3>Composable</h3> 
+    </summary>
+
+```kotlin
+PaginatedLazyVerticalGrid(
+    paginationState = paginationState,
+    firstPageProgressIndicator = { ... },
+    newPageProgressIndicator = { ... },
+    firstPageErrorIndicator = { e -> // from setError
+        ... e.message ...
+        ... onRetry = { paginationState.retryLastFailedRequest() } ...
+    },
+    newPageErrorIndicator = { e -> ... },
+    ... // The rest of LazyVerticalGrid params
+) {
+    itemsIndexed(
+        paginationState.allItems,
+    ) { _, item ->
+        Item(value = item)
+    }
+}
+```
+
+</details>
+
+### `PaginatedLazyHorizontalGrid`: ###
+
+<p>
+    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTJ1dWhsMWVkcGpmdGFyOTN1aDFjenBuNTl0bnR4cDV3MjdiN3Z4ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5hLbIxhmiHkiMU963B/giphy.gif" width="27%" align="top" />
+    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzJ4dnllYW5ncWNnbmtycjIycnU4d3pkbmkzbTM3azZsYXJlZjRrNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/YTCL5P2a7NSJXRASvU/giphy.gif" width="25.62%" align="top" />
+    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGNhZGduaGg5ZTc5aXhianh3bXdmbHhwZHE4a2x5cmZteW9yanNvZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w5nCrcuOCCydr3lknl/giphy.gif" width="45.5%" align="top">
+</p>
+
+<details open>
+    <summary> 
+        <h3>Composable</h3> 
+    </summary>
+
+```kotlin
+PaginatedLazyHorizontalGrid(
+    paginationState = paginationState,
+    firstPageProgressIndicator = { ... },
+    newPageProgressIndicator = { ... },
+    firstPageErrorIndicator = { e -> // from setError
+        ... e.message ...
+        ... onRetry = { paginationState.retryLastFailedRequest() } ...
+    },
+    newPageErrorIndicator = { e -> ... },
+    ... // The rest of LazyHorizontalGrid params
+) {
+    itemsIndexed(
+        paginationState.allItems,
+    ) { _, item ->
+        Item(value = item)
+    }
+}
+```
 
 <details>
     <summary> 
-        <h1>Example (no ViewModel)</h1> 
+        <h1>State in UI (no ViewModel)</h1> 
     </summary>
     
 ```kotlin
@@ -80,30 +208,14 @@ fun Content() {
         }
     )
 
-    // Or PaginatedLazyRow
-    PaginatedLazyColumn(
-        paginationState = paginationState,
-        firstPageProgressIndicator = { ... },
-        newPageProgressIndicator = { ... },
-        firstPageErrorIndicator = { e -> // from setError
-            ... e.message ...
-            ... onRetry = { paginationState.retryLastFailedRequest() } ...
-        },
-        newPageErrorIndicator = { e -> ... },
-    ) {
-        itemsIndexed(
-            paginationState.allItems,
-        ) { _, item ->
-            Item(value = item)
-        }
-    }
+    // Your paginated composable here
 }
 ```
 
 </details>
 <details open>
     <summary> 
-        <h1>Example with ViewModel</h1> 
+        <h1>State in a ViewModel (Recommended)</h1> 
     </summary>
 
 ```kotlin
@@ -135,23 +247,7 @@ class MyViewModel : ViewModel() {
 fun Content(viewModel: MyViewModel) {
     val paginationState = viewModel.paginationState
 
-    // Or PaginatedLazyRow
-    PaginatedLazyColumn(
-       paginationState = paginationState,
-       firstPageProgressIndicator = { ... },
-       newPageProgressIndicator = { ... },
-        firstPageErrorIndicator = { e -> // from setError
-            ... e.message ...
-            ... onRetry = { paginationState.retryLastFailedRequest() } ...
-        },
-       newPageErrorIndicator = { e -> ... },
-    ) {
-       itemsIndexed(
-           paginationState.allItems,
-       ) { _, item ->
-           Item(value = item)
-       }
-    }
+    // Your Paginated composable here
 }
 ```
 
@@ -159,7 +255,9 @@ fun Content(viewModel: MyViewModel) {
 
 # Setup #
 
-Get the latest version via Maven Central:
+Get the latest version via Maven Central: 
+
+> (badge may not always be up to date, use the toml declaration for the latest release)
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.ahmad-hamwi/lazy-pagination-compose/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.ahmad-hamwi/lazy-pagination-compose)
 
@@ -268,16 +366,16 @@ val paginationState = rememberPaginationState<Int, Model>(
 )
 ```
 
-## 2- Define your paginated lazy list `PaginatedLazyColumn` or `PaginatedLazyRow` ##
+## 2- Define your paginated composable ##
 
-### Provide your composables for every pagination state you would like to render ###
+It can either be `PaginatedLazyColumn` or `PaginatedLazyRow` or `PaginatedLazyVerticalGrid` or `PaginatedLazyHorizontalGrid`
 
 ```kotlin
 @Composable
 fun Content() {
-    val paginationState = ...
+    val paginationState = ... // either remembered here or in ViewModel
     
-    // Or PaginatedLazyRow
+    // Or any other paginated composable
     PaginatedLazyColumn(
         paginationState = paginationState,
         firstPageProgressIndicator = { ... },

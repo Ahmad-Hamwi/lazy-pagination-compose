@@ -178,7 +178,7 @@ allprojects {
 
 ```toml
 [versions]
-lazy-pagination-compose = "1.2.5"
+lazy-pagination-compose = "1.3.5"
 
 [libraries]
 lazyPaginationCompose = { module = "io.github.ahmad-hamwi:lazy-pagination-compose", version.ref = "lazy-pagination-compose" }

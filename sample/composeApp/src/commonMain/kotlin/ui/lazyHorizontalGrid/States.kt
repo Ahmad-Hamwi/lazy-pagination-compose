@@ -96,7 +96,7 @@ fun NewPageErrorIndicator(
                 exception.message!!,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontSize = 16.sp
             )
 
             Spacer(modifier = Modifier.width(16.dp))

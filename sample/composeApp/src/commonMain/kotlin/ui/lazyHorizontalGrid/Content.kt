@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun PaginatedLazyHorizontalGridSampleContent(modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
-    val dataSource = remember { DataSource(fastLoad = true, itemsCount = 20) }
+    val dataSource = remember { DataSource(itemsCount = 20) }
 
     val paginationState = rememberPaginationState(
         initialPageKey = 1,

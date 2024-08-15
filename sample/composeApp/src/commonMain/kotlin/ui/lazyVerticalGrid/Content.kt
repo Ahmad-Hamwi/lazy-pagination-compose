@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun PaginatedLazyVerticalGridSampleContent(modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
-    val dataSource = remember { DataSource(fastLoad = true, itemsCount = 20) }
+    val dataSource = remember { DataSource(itemsCount = 20) }
 
     val paginationState = rememberPaginationState(
         initialPageKey = 1,
@@ -63,7 +63,7 @@ fun PaginatedLazyVerticalGridSampleContent(modifier: Modifier = Modifier) {
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Adaptive(100.dp),
     ) {
         itemsIndexed(
             paginationState.allItems,

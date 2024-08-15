@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import kotlin.test.Test
 
-class PaginatedLazyColumnTest : PaginatedLazyListTest() {
+class PaginatedLazyColumnTest : PaginatedLazyScrollableTest() {
 
     @Suppress("TestFunctionName")
     @Composable

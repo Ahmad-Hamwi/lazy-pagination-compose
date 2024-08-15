@@ -1,5 +1,7 @@
 package io.github.ahmad_hamwi.compose.pagination
 
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
@@ -8,24 +10,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-internal typealias LazyGrid = @Composable (PaginatedGridItemsHandler) -> Unit
+internal typealias LazyScrollable<LAZY_SCROLLABLE_SCOPE> = @Composable (PaginatedScrollableItemsHandler<LAZY_SCROLLABLE_SCOPE>) -> Unit
 
-internal typealias PaginatedGridItemsHandler = LazyGridScope.(ClientLoadedGridContent) -> Unit
+internal typealias PaginatedScrollableItemsHandler<LAZY_SCROLLABLE_SCOPE> = LAZY_SCROLLABLE_SCOPE.(ClientLoadedScrollableContent<LAZY_SCROLLABLE_SCOPE>) -> Unit
 
-internal typealias ClientLoadedGridContent = LazyGridScope.() -> Unit
+internal typealias ClientLoadedScrollableContent<LAZY_SCROLLABLE_SCOPE> = LAZY_SCROLLABLE_SCOPE.() -> Unit
 
 @Suppress("UNCHECKED_CAST")
 @Composable
-internal fun <KEY, T> PaginatedLazyGrid(
+internal fun <KEY, T, LAZY_STATE, LAZY_SCROLLABLE_SCOPE> PaginatedLazyScrollable(
     paginationState: PaginationState<KEY, T>,
     modifier: Modifier = Modifier,
     firstPageProgressIndicator: @Composable () -> Unit = {},
     newPageProgressIndicator: @Composable () -> Unit = {},
     firstPageErrorIndicator: @Composable (e: Exception) -> Unit = {},
     newPageErrorIndicator: @Composable (e: Exception) -> Unit = {},
-    state: LazyGridState,
-    concreteLazyList: LazyGrid,
+    state: LAZY_STATE,
+    concreteLazyList: LazyScrollable<LAZY_SCROLLABLE_SCOPE>,
 ) {
     var internalState by paginationState.internalState
 
@@ -49,9 +53,28 @@ internal fun <KEY, T> PaginatedLazyGrid(
 
     if (internalState.items != null) {
         LaunchedEffect(state) {
-            snapshotFlow { state.layoutInfo.visibleItemsInfo.lastOrNull() }.collect { firstVisibleItemIndex ->
-                val hasReachedLastItem = (firstVisibleItemIndex?.index ?: Int.MIN_VALUE) >=
-                        (internalState.items?.lastIndex ?: Int.MAX_VALUE)
+            val lastVisibleItemIndex: Flow<Int>
+
+            when (state) {
+                is LazyGridState -> {
+                    lastVisibleItemIndex =
+                        snapshotFlow { state.layoutInfo.visibleItemsInfo.lastOrNull() }
+                            .map { item -> item?.index ?: Int.MIN_VALUE }
+                }
+
+                is LazyListState -> {
+                    lastVisibleItemIndex =
+                        snapshotFlow { state.layoutInfo.visibleItemsInfo.lastOrNull() }
+                            .map { item -> item?.index ?: Int.MIN_VALUE }
+                }
+
+                else -> {
+                    throw IllegalArgumentException("Unsupported Lazy scrollable state type")
+                }
+            }
+
+            lastVisibleItemIndex.collect {
+                val hasReachedLastItem = it >= (internalState.items?.lastIndex ?: Int.MAX_VALUE)
 
                 val isLastPage =
                     (internalState as? PaginationInternalState.Loaded)?.isLastPage != false
@@ -77,13 +100,24 @@ internal fun <KEY, T> PaginatedLazyGrid(
         concreteLazyList { clientContent ->
             val internalStateRef = internalState
 
+            val item: (
+                key: Any?,
+                content: @Composable LAZY_SCROLLABLE_SCOPE.() -> Unit
+            ) -> Unit = { key, content ->
+                when (this) {
+                    is LazyListScope -> item(key) { content() }
+                    is LazyGridScope -> item(key) { content() }
+                    else -> throw IllegalStateException("Unsupported Lazy scrollable scope type")
+                }
+            }
+
             if (internalStateRef.items != null) {
                 clientContent()
             }
 
             if (internalStateRef is PaginationInternalState.Loading) {
                 item(
-                    key = LazyListKeys.NEW_PAGE_PROGRESS_INDICATOR_KEY
+                    LazyListKeys.NEW_PAGE_PROGRESS_INDICATOR_KEY
                 ) {
                     newPageProgressIndicator()
                 }
@@ -91,11 +125,9 @@ internal fun <KEY, T> PaginatedLazyGrid(
 
             if (internalStateRef is PaginationInternalState.Error) {
                 item(
-                    key = LazyListKeys.NEW_PAGE_ERROR_INDICATOR_KEY
+                    LazyListKeys.NEW_PAGE_ERROR_INDICATOR_KEY
                 ) {
-                    newPageErrorIndicator(
-                        internalStateRef.exception
-                    )
+                    newPageErrorIndicator(internalStateRef.exception)
                 }
             }
         }

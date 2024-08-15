@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import kotlin.test.Test
 
-class PaginatedLazyVerticalGridTest : PaginatedLazyListTest() {
+class PaginatedLazyVerticalGridTest : PaginatedLazyScrollableTest() {
     @Suppress("TestFunctionName")
     @Composable
     override fun SutComposable(

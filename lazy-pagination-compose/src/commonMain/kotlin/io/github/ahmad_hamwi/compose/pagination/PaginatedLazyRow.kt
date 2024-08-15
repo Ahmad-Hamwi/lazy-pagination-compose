@@ -31,7 +31,7 @@ fun <KEY, T> PaginatedLazyRow(
     userScrollEnabled: Boolean = true,
     content: LazyListScope.() -> Unit,
 ) {
-    PaginatedLazyList(
+    PaginatedLazyScrollable<KEY, T, LazyListState, LazyListScope>(
         paginationState,
         modifier,
         firstPageProgressIndicator,

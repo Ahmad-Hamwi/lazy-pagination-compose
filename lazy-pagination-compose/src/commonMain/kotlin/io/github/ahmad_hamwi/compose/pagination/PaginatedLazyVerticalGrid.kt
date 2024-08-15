@@ -32,7 +32,7 @@ fun <KEY, T> PaginatedLazyVerticalGrid(
     userScrollEnabled: Boolean = true,
     content: LazyGridScope.() -> Unit
 ) {
-    PaginatedLazyGrid(
+    PaginatedLazyScrollable<KEY, T, LazyGridState, LazyGridScope>(
         paginationState,
         modifier,
         firstPageProgressIndicator,

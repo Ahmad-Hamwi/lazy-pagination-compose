@@ -9,15 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import io.github.ahmad_hamwi.compose.pagination.PaginatedLazyListTest.Companion.FIRST_PAGE_ERROR_INDICATOR_TAG
-import io.github.ahmad_hamwi.compose.pagination.PaginatedLazyListTest.Companion.FIRST_PAGE_PROGRESS_INDICATOR_TAG
-import io.github.ahmad_hamwi.compose.pagination.PaginatedLazyListTest.Companion.ITEM_CONTENT_TAG
-import io.github.ahmad_hamwi.compose.pagination.PaginatedLazyListTest.Companion.LAZY_LIST_TAG
-import io.github.ahmad_hamwi.compose.pagination.PaginatedLazyListTest.Companion.NEW_PAGE_ERROR_INDICATOR_TAG
-import io.github.ahmad_hamwi.compose.pagination.PaginatedLazyListTest.Companion.NEW_PAGE_PROGRESS_INDICATOR_TAG
 import kotlin.test.Test
 
-class PaginatedLazyRowTest : PaginatedLazyListTest() {
+class PaginatedLazyRowTest : PaginatedLazyScrollableTest() {
 
     @Suppress("TestFunctionName")
     @Composable

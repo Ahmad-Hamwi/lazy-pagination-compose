@@ -11,7 +11,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 
 @OptIn(ExperimentalTestApi::class)
-abstract class PaginatedLazyListTest {
+abstract class PaginatedLazyScrollableTest {
 
     companion object {
         const val LAZY_LIST_TAG = "lazyList"

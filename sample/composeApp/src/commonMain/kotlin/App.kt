@@ -13,8 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import ui.lazyColumn.PaginatedLazyColumnSampleContent
-import ui.lazyRow.PaginatedLazyRowSampleContent
+import ui.lazyHorizontalGrid.PaginatedLazyHorizontalGridSampleContent
 
 @Composable
 @Preview
@@ -23,8 +22,8 @@ fun App() {
         Scaffold(
             topBar = { TopBar() }
         ) {
-            PaginatedLazyColumnSampleContent(
-                modifier = Modifier.padding(it)
+            PaginatedLazyHorizontalGridSampleContent(
+                modifier = Modifier.padding(it).height(300.dp)
             )
         }
     }

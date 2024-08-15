@@ -1,4 +1,4 @@
-package ui.lazyVerticalGrid
+package ui.lazyHorizontalGrid
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,12 +10,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import data.DataSource
-import io.github.ahmad_hamwi.compose.pagination.PaginatedLazyVerticalGrid
+import io.github.ahmad_hamwi.compose.pagination.PaginatedLazyHorizontalGrid
 import io.github.ahmad_hamwi.compose.pagination.rememberPaginationState
 import kotlinx.coroutines.launch
 
 @Composable
-fun PaginatedLazyVerticalGridSampleContent(modifier: Modifier = Modifier) {
+fun PaginatedLazyHorizontalGridSampleContent(modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
     val dataSource = remember { DataSource(fastLoad = true, itemsCount = 20) }
 
@@ -38,7 +38,7 @@ fun PaginatedLazyVerticalGridSampleContent(modifier: Modifier = Modifier) {
         }
     )
 
-    PaginatedLazyVerticalGrid(
+    PaginatedLazyHorizontalGrid(
         modifier = modifier,
         paginationState = paginationState,
         firstPageProgressIndicator = { FirstPageProgressIndicator(modifier) },
@@ -63,12 +63,12 @@ fun PaginatedLazyVerticalGridSampleContent(modifier: Modifier = Modifier) {
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        columns = GridCells.Fixed(3),
+        rows = GridCells.Fixed(3),
     ) {
         itemsIndexed(
             paginationState.allItems,
         ) { _, item ->
-            VerticalGridItem(value = item)
+            HorizontalGridItem(modifier = modifier, value = item)
         }
     }
 }

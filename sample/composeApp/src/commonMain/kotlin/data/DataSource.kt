@@ -23,7 +23,7 @@ class DataSource(private val fastLoad: Boolean = false, private val itemsCount: 
         }
 
         if (attemptsMap[attempts] == "error") {
-            throw Exception("Something went wrong.\nTry again.")
+            throw Exception("Something went wrong!")
         } else {
             return MyPageModel(
                 pageNumber,

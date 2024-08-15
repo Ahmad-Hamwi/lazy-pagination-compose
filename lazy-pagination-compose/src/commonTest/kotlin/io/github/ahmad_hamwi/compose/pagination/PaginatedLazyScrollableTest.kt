@@ -14,7 +14,7 @@ import assertk.assertions.isEqualTo
 abstract class PaginatedLazyScrollableTest {
 
     companion object {
-        const val LAZY_LIST_TAG = "lazyList"
+        const val LAZY_SCROLLABLE_TAG = "lazyScrollable"
         const val FIRST_PAGE_PROGRESS_INDICATOR_TAG = "firstPageProgressIndicator"
         const val FIRST_PAGE_ERROR_INDICATOR_TAG = "firstPageErrorIndicator"
         const val ITEM_CONTENT_TAG = "itemContent"
@@ -102,8 +102,8 @@ abstract class PaginatedLazyScrollableTest {
 
         state.appendPage(items = listOf("", "", "", "", ""), nextPageKey = 2)
 
-        onNodeWithTag(LAZY_LIST_TAG).performScrollToIndex(4)
-        onNodeWithTag(LAZY_LIST_TAG).performScrollToKey(LazyListKeys.NEW_PAGE_PROGRESS_INDICATOR_KEY)
+        onNodeWithTag(LAZY_SCROLLABLE_TAG).performScrollToIndex(4)
+        onNodeWithTag(LAZY_SCROLLABLE_TAG).performScrollToKey(LazyScrollableKeys.NEW_PAGE_PROGRESS_INDICATOR_KEY)
 
         onNodeWithTag(NEW_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
         assertThat(pageKeysCalled).isEqualTo(listOf(1, 2))
@@ -120,8 +120,8 @@ abstract class PaginatedLazyScrollableTest {
         state.appendPage(items = listOf("", "", "", "", ""), nextPageKey = 2)
         state.setError(Exception("New page error"))
 
-        onNodeWithTag(LAZY_LIST_TAG).performScrollToIndex(4)
-        onNodeWithTag(LAZY_LIST_TAG).performScrollToKey(LazyListKeys.NEW_PAGE_ERROR_INDICATOR_KEY)
+        onNodeWithTag(LAZY_SCROLLABLE_TAG).performScrollToIndex(4)
+        onNodeWithTag(LAZY_SCROLLABLE_TAG).performScrollToKey(LazyScrollableKeys.NEW_PAGE_ERROR_INDICATOR_KEY)
 
         onNodeWithTag(NEW_PAGE_ERROR_INDICATOR_TAG).assertExists()
         onNodeWithText("New page error").assertExists()
@@ -166,7 +166,7 @@ abstract class PaginatedLazyScrollableTest {
             state.setError(Exception())
             state.retryLastFailedRequest()
 
-            onNodeWithTag(LAZY_LIST_TAG).performScrollToIndex(0)
+            onNodeWithTag(LAZY_SCROLLABLE_TAG).performScrollToIndex(0)
 
             onNodeWithTag(NEW_PAGE_PROGRESS_INDICATOR_TAG).assertExists()
             assertThat(pageKeysCalled).isEqualTo(listOf(1, 2))
@@ -223,7 +223,7 @@ abstract class PaginatedLazyScrollableTest {
 
         setContent { SutComposable(state) }
         state.appendPage(items = listOf("", "", "", "", ""), nextPageKey = 2, isLastPage = false)
-        onNodeWithTag(LAZY_LIST_TAG).performScrollToIndex(4)
+        onNodeWithTag(LAZY_SCROLLABLE_TAG).performScrollToIndex(4)
         waitForIdle()
         state.appendPage(items = listOf("", "", "", "", ""), nextPageKey = 3, isLastPage = true)
         waitForIdle()

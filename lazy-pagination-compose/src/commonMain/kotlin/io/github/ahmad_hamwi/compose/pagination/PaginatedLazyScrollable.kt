@@ -117,7 +117,7 @@ internal fun <KEY, T, LAZY_STATE, LAZY_SCROLLABLE_SCOPE> PaginatedLazyScrollable
 
             if (internalStateRef is PaginationInternalState.Loading) {
                 item(
-                    LazyListKeys.NEW_PAGE_PROGRESS_INDICATOR_KEY
+                    LazyScrollableKeys.NEW_PAGE_PROGRESS_INDICATOR_KEY
                 ) {
                     newPageProgressIndicator()
                 }
@@ -125,7 +125,7 @@ internal fun <KEY, T, LAZY_STATE, LAZY_SCROLLABLE_SCOPE> PaginatedLazyScrollable
 
             if (internalStateRef is PaginationInternalState.Error) {
                 item(
-                    LazyListKeys.NEW_PAGE_ERROR_INDICATOR_KEY
+                    LazyScrollableKeys.NEW_PAGE_ERROR_INDICATOR_KEY
                 ) {
                     newPageErrorIndicator(internalStateRef.exception)
                 }

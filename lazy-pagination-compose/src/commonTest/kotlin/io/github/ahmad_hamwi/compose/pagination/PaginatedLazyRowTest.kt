@@ -19,7 +19,7 @@ class PaginatedLazyRowTest : PaginatedLazyScrollableTest() {
         paginationState: PaginationState<Int, String>
     ) {
         PaginatedLazyRow(
-            modifier = Modifier.testTag(LAZY_LIST_TAG),
+            modifier = Modifier.testTag(LAZY_SCROLLABLE_TAG),
             paginationState = paginationState,
             firstPageProgressIndicator = {
                 Box(modifier = Modifier.testTag(FIRST_PAGE_PROGRESS_INDICATOR_TAG))

@@ -85,7 +85,26 @@ class PaginationState<KEY, T>(
         )
     }
 
+    @OptIn(ExperimentalPaginationApi::class)
     fun appendPage(items: List<T>, nextPageKey: KEY, isLastPage: Boolean = false) {
+        appendPageWithUpdates(
+            allItems = (internalState.value.items ?: listOf()) + items,
+            nextPageKey = nextPageKey,
+            isLastPage = isLastPage
+        )
+    }
+
+
+    /**
+     * Updates current allItems but should also include new changes from a new page.
+     * This allows you to do a full list update while still do the same `appendPage()` behavior
+     * in one shot, rather than having to set allItems first then call `appendPage()`.
+     *
+     * This API is experimental as it may be confusing to some users, naming can change without
+     * notice and can be subject to removal.
+     */
+    @ExperimentalPaginationApi
+    fun appendPageWithUpdates(allItems: List<T>, nextPageKey: KEY, isLastPage: Boolean = false) {
         val internalStateSnapshot = internalState.value
         val requestedPageKeyOfLoadingOrErrorState: KEY? =
             (internalStateSnapshot as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
@@ -95,7 +114,7 @@ class PaginationState<KEY, T>(
             requestedPageKey = requestedPageKeyOfLoadingOrErrorState
                 ?: internalStateSnapshot.initialPageKey,
             nextPageKey = nextPageKey,
-            items = (internalStateSnapshot.items ?: listOf()) + items,
+            items = allItems,
             isLastPage = isLastPage
         )
     }

@@ -40,7 +40,7 @@ class PaginatedLazyVerticalGridTest : PaginatedLazyScrollableTest() {
             columns = GridCells.Fixed(3),
         ) {
             itemsIndexed(
-                items = paginationState.allItems,
+                items = paginationState.allItems!!,
                 key = { i, _ -> i }
             ) { _, _ ->
                 Box(

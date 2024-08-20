@@ -12,17 +12,20 @@ class PaginationState<KEY, T>(
     internal val onRequestPage: PaginationState<KEY, T>.(KEY) -> Unit
 ) {
     internal var internalState =
-        mutableStateOf<PaginationInternalState<KEY, T>>(PaginationInternalState.Initial(initialPageKey))
+        mutableStateOf<PaginationInternalState<KEY, T>>(
+            PaginationInternalState.Initial(
+                initialPageKey
+            )
+        )
 
     val requestedPageKey: KEY?
         get() = (internalState.value as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
 
-    val allItems: List<T>
-        get() = if (internalState.value.items == null) {
-            throw NoSuchElementException("No pages are appeneded yet")
-        } else {
-            internalState.value.items!!
-        }
+    /**
+     * All the items currently loaded so far. null when no items has been loaded yet.
+     */
+    val allItems: List<T>?
+        get() = internalState.value.items
 
     fun setError(exception: Exception) {
         val internalStateSnapshot = internalState.value
@@ -45,8 +48,26 @@ class PaginationState<KEY, T>(
         )
     }
 
+    @OptIn(ExperimentalPaginationApi::class)
     fun appendPage(items: List<T>, nextPageKey: KEY, isLastPage: Boolean = false) {
-        val newItems = (internalState.value.items ?: listOf()) + items
+        appendPageWithUpdates(
+            allItems = (internalState.value.items ?: listOf()) + items,
+            nextPageKey = nextPageKey,
+            isLastPage = isLastPage
+        )
+    }
+
+
+    /**
+     * Updates current allItems but should also include new changes from a new page.
+     * This allows you to do a full list update while still do the same `appendPage()` behavior
+     * in one shot, rather than having to set allItems first then call `appendPage()`.
+     *
+     * This API is experimental as it may be confusing to some users, naming can change without
+     * notice and can be subject to removal.
+     */
+    @ExperimentalPaginationApi
+    fun appendPageWithUpdates(allItems: List<T>, nextPageKey: KEY, isLastPage: Boolean = false) {
         val internalStateSnapshot = internalState.value
         val requestedPageKeyOfLoadingOrErrorState: KEY? =
             (internalStateSnapshot as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
@@ -56,7 +77,7 @@ class PaginationState<KEY, T>(
             requestedPageKey = requestedPageKeyOfLoadingOrErrorState
                 ?: internalStateSnapshot.initialPageKey,
             nextPageKey = nextPageKey,
-            items = newItems,
+            items = allItems,
             isLastPage = isLastPage
         )
     }

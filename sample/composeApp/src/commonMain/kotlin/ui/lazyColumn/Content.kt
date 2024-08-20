@@ -84,7 +84,7 @@ fun PaginatedLazyColumnSampleContent(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             itemsIndexed(
-                paginationState.allItems,
+                paginationState.allItems!!,
             ) { index, item ->
                 if ((index + 1) % 4 == 0) {
                     PaginatedLazyRowSampleContent(

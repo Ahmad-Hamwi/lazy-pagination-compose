@@ -12,57 +12,20 @@ class PaginationState<KEY, T>(
     internal val onRequestPage: PaginationState<KEY, T>.(KEY) -> Unit
 ) {
     internal var internalState =
-        mutableStateOf<PaginationInternalState<KEY, T>>(PaginationInternalState.Initial(initialPageKey))
+        mutableStateOf<PaginationInternalState<KEY, T>>(
+            PaginationInternalState.Initial(
+                initialPageKey
+            )
+        )
 
     val requestedPageKey: KEY?
         get() = (internalState.value as? PaginationInternalState.IHasRequestedPageKey<KEY>)?.requestedPageKey
 
-    var allItems: List<T>
-        get() = if (internalState.value.items == null) {
-            throw NoSuchElementException("No pages are appeneded yet")
-        } else {
-            internalState.value.items!!
-        }
-        set(value) {
-            when (val internalStateSnapshot = internalState.value) {
-                is PaginationInternalState.Initial -> {
-                    internalState.value = PaginationInternalState.Loaded(
-                        initialPageKey = internalStateSnapshot.initialPageKey,
-                        requestedPageKey = internalStateSnapshot.initialPageKey, // should be null but won't affect behavior
-                        nextPageKey = internalStateSnapshot.initialPageKey,
-                        items = value,
-                        isLastPage = false,
-                    )
-                }
-
-                is PaginationInternalState.Loading -> {
-                    internalState.value = PaginationInternalState.Loading(
-                        initialPageKey = internalStateSnapshot.initialPageKey,
-                        requestedPageKey = internalStateSnapshot.requestedPageKey,
-                        items = value,
-                    )
-                }
-
-                is PaginationInternalState.Error -> {
-                    internalState.value = PaginationInternalState.Error(
-                        initialPageKey = internalStateSnapshot.initialPageKey,
-                        requestedPageKey = internalStateSnapshot.requestedPageKey,
-                        exception = internalStateSnapshot.exception,
-                        items = value,
-                    )
-                }
-
-                is PaginationInternalState.Loaded -> {
-                    internalState.value = PaginationInternalState.Loaded(
-                        initialPageKey = internalStateSnapshot.initialPageKey,
-                        requestedPageKey = internalStateSnapshot.requestedPageKey,
-                        nextPageKey = internalStateSnapshot.nextPageKey,
-                        items = value,
-                        isLastPage = internalStateSnapshot.isLastPage,
-                    )
-                }
-            }
-        }
+    /**
+     * All the items currently loaded so far. null when no items has been loaded yet.
+     */
+    val allItems: List<T>?
+        get() = internalState.value.items
 
     fun setError(exception: Exception) {
         val internalStateSnapshot = internalState.value

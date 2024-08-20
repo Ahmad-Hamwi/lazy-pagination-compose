@@ -67,7 +67,7 @@ PaginatedLazyColumn(
     // The rest of LazyColumn params
 ) {
     itemsIndexed(
-        paginationState.allItems,
+        paginationState.allItems!!, // safe to access here
     ) { _, item ->
         Item(value = item)
     }
@@ -102,7 +102,7 @@ PaginatedLazyRow(
     ... // The rest of LazyRow params
 ) {
     itemsIndexed(
-        paginationState.allItems,
+        paginationState.allItems!!, // safe to access here
     ) { _, item ->
         Item(value = item)
     }
@@ -137,7 +137,7 @@ PaginatedLazyVerticalGrid(
     ... // The rest of LazyVerticalGrid params
 ) {
     itemsIndexed(
-        paginationState.allItems,
+        paginationState.allItems!!, // safe to access here
     ) { _, item ->
         Item(value = item)
     }
@@ -172,7 +172,7 @@ PaginatedLazyHorizontalGrid(
     ... // The rest of LazyHorizontalGrid params
 ) {
     itemsIndexed(
-        paginationState.allItems,
+        paginationState.allItems!!, // safe to access here
     ) { _, item ->
         Item(value = item)
     }
@@ -384,7 +384,7 @@ fun Content() {
         newPageErrorIndicator = { e -> ... },
     ) {
         itemsIndexed(
-            paginationState.allItems,
+            paginationState.allItems!!, // safe to access here
         ) { _, item ->
             Item(value = item)
         }

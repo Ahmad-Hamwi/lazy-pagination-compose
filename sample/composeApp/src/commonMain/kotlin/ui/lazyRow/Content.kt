@@ -63,7 +63,7 @@ fun PaginatedLazyRowSampleContent(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         itemsIndexed(
-            paginationState.allItems,
+            paginationState.allItems!!,
         ) { _, item ->
             RowItem(modifier = modifier, value = item)
         }

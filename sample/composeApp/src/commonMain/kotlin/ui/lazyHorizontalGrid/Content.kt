@@ -66,7 +66,7 @@ fun PaginatedLazyHorizontalGridSampleContent(modifier: Modifier = Modifier) {
         rows = GridCells.Fixed(3),
     ) {
         itemsIndexed(
-            paginationState.allItems,
+            paginationState.allItems!!,
         ) { _, item ->
             HorizontalGridItem(modifier = modifier, value = item)
         }

@@ -39,7 +39,7 @@ class PaginatedLazyRowTest : PaginatedLazyScrollableTest() {
             }
         ) {
             itemsIndexed(
-                items = paginationState.allItems,
+                items = paginationState.allItems!!,
                 key = { i, _ -> i }
             ) { _, _ ->
                 Box(

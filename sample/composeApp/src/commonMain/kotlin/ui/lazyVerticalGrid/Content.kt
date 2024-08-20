@@ -66,7 +66,7 @@ fun PaginatedLazyVerticalGridSampleContent(modifier: Modifier = Modifier) {
         columns = GridCells.Adaptive(100.dp),
     ) {
         itemsIndexed(
-            paginationState.allItems,
+            paginationState.allItems!!,
         ) { _, item ->
             VerticalGridItem(value = item)
         }

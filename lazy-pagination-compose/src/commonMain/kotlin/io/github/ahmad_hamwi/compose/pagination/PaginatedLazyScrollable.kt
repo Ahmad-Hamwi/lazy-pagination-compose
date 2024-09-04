@@ -4,6 +4,8 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -62,6 +64,12 @@ internal fun <KEY, T, LAZY_STATE, LAZY_SCROLLABLE_SCOPE> PaginatedLazyScrollable
                             .map { item -> item?.index ?: Int.MIN_VALUE }
                 }
 
+                is LazyStaggeredGridState -> {
+                    lastVisibleItemIndex =
+                        snapshotFlow { state.layoutInfo.visibleItemsInfo.lastOrNull() }
+                            .map { item -> item?.index ?: Int.MIN_VALUE }
+                }
+
                 is LazyListState -> {
                     lastVisibleItemIndex =
                         snapshotFlow { state.layoutInfo.visibleItemsInfo.lastOrNull() }
@@ -107,6 +115,7 @@ internal fun <KEY, T, LAZY_STATE, LAZY_SCROLLABLE_SCOPE> PaginatedLazyScrollable
                 when (this) {
                     is LazyListScope -> item(key) { content() }
                     is LazyGridScope -> item(key) { content() }
+                    is LazyStaggeredGridScope -> item(key) { content() }
                     else -> throw IllegalStateException("Unsupported Lazy scrollable scope type")
                 }
             }

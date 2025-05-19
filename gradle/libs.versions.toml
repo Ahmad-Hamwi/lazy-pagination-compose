@@ -12,7 +12,7 @@ androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 compose-plugin = "1.8.0"
 junit = "4.13.2"
-kotlin = "2.1.20"
+kotlin = "2.1.21"
 assertK = "0.28.1"
 nexus-publish = "2.0.0"
 

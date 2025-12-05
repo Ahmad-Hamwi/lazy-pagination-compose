@@ -20,9 +20,12 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
+
     iosX64()
     iosArm64()
     iosSimulatorArm64()
+    macosX64()
+    macosArm64()
 
     js {
         browser()
@@ -40,10 +43,12 @@ kotlin {
             implementation(compose.desktop.currentOs)
         }
 
-        commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.ui)
+        val commonMain by getting {
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.ui)
+            }
         }
 
         commonTest.dependencies {
@@ -53,6 +58,23 @@ kotlin {
             implementation(compose.uiTest)
             implementation(libs.assertK)
         }
+
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val macosX64Main by getting
+        val macosArm64Main by getting
+        val appleMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+            macosX64Main.dependsOn(this)
+            macosArm64Main.dependsOn(this)
+            dependencies {
+            }
+        }
+
     }
 }
 

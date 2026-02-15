@@ -21,6 +21,10 @@ jobs:
             os: macos-latest
           - target: publishIosSimulatorArm64PublicationToSonatypeRepository
             os: macos-latest
+          - target: publishIosArm64PublicationToSonatypeRepository
+            os: macos-latest
+          - target: publishIosX64PublicationToSonatypeRepository
+            os: macos-latest
           - target: publishMacosArm64PublicationToSonatypeRepository
             os: macos-latest
           - target: publishIosX64PublicationToSonatypeRepository
